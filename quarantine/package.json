@@ -1,0 +1,17 @@
+{
+  "name": "quarantine",
+  "version": "1.0.0",
+  "description": "BadUI for April 2020",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "baduibattles"
+  ],
+  "author": "Arc-blroth",
+  "license": "WTFPL",
+  "dependencies": {
+    "express.js": "^1.0.0"
+  }
+}

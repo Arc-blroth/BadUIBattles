@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>LOGin</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Hind&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="/stylesheet.css">
+		<link href="ahh.png" rel="icon">
+	</head>
+	
+	<body id="shaker">
+		<div class="container h-100">
+			<div class="row align-items-center h-100">
+				<div class="col-6 mx-auto">
+					<div class="jumbotron" id="jumbotron">
+						<h1 class="display-4 mb-5">logIN</h1>
+						<form>
+						  <div class="form-group">
+							<label for="usernameIn">username</label>
+							<input type="username" class="form-control" id="usernameIn" aria-describedby="usernameInfoBlock">
+							<small id="usernameInfoBlock" class="form-text text-muted">
+							  You're username must be between π and e<sup>5</sup> characters long. It must contain at least 1 letter, 1 number, 1 emoji, the greek question mark symbol, and at least 1 line from the
+								<a href="https://www.ncbi.nlm.nih.gov/nuccore/MN908947.3?report=fasta" target="_blank">FASTA sequence to coronavirus</a>.
+							</small>
+						  </div>
+						  <div class="form-group">
+							<label for="passwordIn">PassWord</label>
+							<input type="password" class="form-control" id="passwordIn">
+						  </div>
+						  <div class="form-group form-check" id="notBotCheckDiv" tabindex="0">
+							<input type="checkbox" class="form-check-input" id="notBotCheck" disabled>
+							<label class="form-check-label" for="notBotCheck" id="notBotCheckLabel">I'm a botn't</label>
+						  </div>
+						  <button type="submit" class="btn btn-primary" id="submit" disabled>Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Because marquees are too great to be deprecated -->
+		<marquee id="fireNotice" scrollamount="40%">PRESS SPACE TO FIRE</marquee>
+		<div id="characterSelectBox">
+			<div class="row justify-content-center h-100 slightlyOffCenter">
+				<form>
+					<div class="form-group">
+						<label for="characterSlider" class="characterSelectLabelBlock">select charmander</label>
+						<p id="characterOut" class="characterSelectLabelInline">A</p>
+						<input type="range" min="0" max="127" value="65" id="characterSlider">
+					</div>
+					<div class="form-group">
+						<input type="checkbox" class="form-check-input" id="characterUnicodeCheck">
+						<label class="form-check-label" for="characterUnicodeCheck">Include all Unicode 13 values</label>
+					</div>
+					<div class="form-group">
+						<button type="submit" id="characterLoad" class="btn btn-primary">Load into Cannon</button>
+						<label class="form-check-label" id="characterLoadLabel" for="characterLoad">Loaded</label>
+					</div>
+				</form>
+			</div>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous" defer></script>
+		<script src="/three.module.js" type="module" defer></script>
+		<script src="/GLTFLoader.js" type="module" defer></script>
+		<script src="/client.js" type="module" defer></script>
+	</body>
+</html>

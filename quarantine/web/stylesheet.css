@@ -1,0 +1,148 @@
+.center {
+	text-align: center;
+	margin: auto;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: 'Hind', sans-serif;
+	background-color: #99d9f3;
+	color: black;
+	display: flex;
+	flex-direction: column;
+}
+
+#jumbotron {
+	z-index: 50;
+}
+
+#notBotCheckLabel {
+	color: black;
+}
+
+#notBotCheckDiv {
+	outline: 0;
+}
+
+.notBotCheckChecked {
+	color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.15rem rgba(0,123, 255, 0.3);
+}
+
+.cannon {
+	position: absolute;
+	top: 60%;
+    transform: translate(10%, -50%);
+	background: white;
+	z-index: -100;
+}
+
+.strike {
+	text-decoration: line-through;
+}
+
+#fireNotice {
+	position: absolute;
+	top: 5%;
+	width: 100%;
+	font-family: Impact, sans-serif;
+	font-size: 6em;
+	color: red;
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+	display: none;
+	z-index: 100;
+}
+
+#characterSelectBox {
+	position: absolute;
+	top: 20%;
+	width: 40%;
+	max-width: 500px;
+	height: 20%;
+	background: white;
+	display: none;
+	padding: 10px 10px 10px 10px;
+	z-index: 80;
+}
+
+.slightlyOffCenter {
+	transform: translate(-6%, 0px);
+}
+
+.characterSelectLabelBlock {
+	display: block;
+}
+
+.characterSelectLabelInline {
+	display: inline-block;
+	margin-right: 10px;
+}
+
+#characterSlider {
+	height: 30px;
+	width: 30%;
+	position: absolute;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+#characterLoad {
+	color: black;
+	background-color: orange;
+	border-color: black;
+	border-width: 1px;
+	margin-right: 10px;
+}
+
+#characterLoadLabel {
+	display: none;
+}
+
+.burnCursor {
+	position: absolute; 
+	width: 10%;
+	height: 10%;
+	background-image: url(fire.png);
+	background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.burnCursor:hover {
+	cursor: url(ahh.svg), url(ahh.png), auto !important;
+}
+
+#shaker {
+	animation-name: shake;
+	animation-duration: 200ms;
+	animation-iteration-count: infinite;
+	animation-play-state: paused;
+	overflow: visible;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-5px, 0, 0);
+	overflow: hidden;
+  }
+  
+  20%, 80% {
+    transform: translate3d(5px, 0, 0);
+	overflow: hidden;
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-5px, -5px, 0);
+	overflow: hidden;
+  }
+
+  40%, 60% {
+    transform: translate3d(5px, 5px, 0);
+	overflow: hidden;
+  }
+}
