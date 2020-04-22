@@ -193,8 +193,8 @@ $("#characterLoad").on("click", () => {
 });
 
 $("#characterSlider").on("input", () => {
-	loadedCharacter = String.fromCharCode($("#characterSlider").val());
-	$("#characterOut").text(loadedCharacter);
+	selectedCharacter = String.fromCharCode($("#characterSlider").val());
+	$("#characterOut").text(selectedCharacter);
 });
 
 $("#submit").on("click", () => {
