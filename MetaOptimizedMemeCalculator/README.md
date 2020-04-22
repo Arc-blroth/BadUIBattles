@@ -34,3 +34,9 @@ Benchmarking on my computer resulted in an approximate speed of 1000 if-statemen
 I think it is safe to say that this program is very inefficent.
 
 #### Now does anyone wanna try to make it even less efficent?
+
+# Building and Running
+
+```
+gradlew run
+```
