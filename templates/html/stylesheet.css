@@ -1,0 +1,16 @@
+.center {
+	text-align: center;
+	margin: auto;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: sans-serif;
+	background-color: #99d9f3;
+	color: black;
+	display: flex;
+	flex-direction: column;
+}
