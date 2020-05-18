@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Welcome mere mortals</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<link rel="stylesheet" href="/stylesheet.css">
+		<link href="icon.png" rel="icon">
+	</head>
+	
+	<body>
+		
+		<p class="abs-center gold welcome welcome-1">Welcome</p>
+		<p class="abs-center gold welcome welcome-2">Please enter<br>Passcode&trade;</p>
+		<p class="abs-center gold welcome welcome-3">to enter the<br>Hall of Origin<br><span class="disclaimer">*Pls no sue Pokémon Company</span></p>
+		<div class="abs-center welcome welcome-4 form" style="display: none;">
+			<input type="passcode" class="center form-control passcode" id="passcode" placeholder="passcode&trade;">
+			<p class="center gold disclaimer" style="display: none;" id="backspaceDisclaimer">A god never makes mistakes. Reload to start anew.</p>
+		</div>
+		<p class="abs-center gold welcome welcome-5" style="display: none;">Welcome, our Lord.</p>
+		<canvas id="notMatPlot" class="abs-center notMatPlot" width=28 height=28></canvas>
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous" defer></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis/dist/tfjs-vis.umd.min.js"></script>
+		<script src="/index.js" type="module" defer></script>
+	</body>
+</html>

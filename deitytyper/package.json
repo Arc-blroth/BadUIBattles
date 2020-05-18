@@ -1,0 +1,19 @@
+{
+  "name": "deitytyper",
+  "version": "1.0.0",
+  "description": "Type by shaking up the world",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Arc-blroth/BadUIBattles/"
+  },
+  "author": "Arc-blroth",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express.js": "^1.0.0"
+  }
+}
