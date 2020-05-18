@@ -1,8 +1,9 @@
 
 # ================================================
 # Script botched together from various sources
-# on the Tensorflow website. For citations,
-# see the main README.md file for deitytyper.
+# on the Tensorflow website. For citations and
+# licensing see the main README.md file for 
+# deitytyper.
 #
 # 5-15-2020
 # A CNN would have probably been better for this
