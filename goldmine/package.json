@@ -1,0 +1,26 @@
+{
+  "name": "goldmine",
+  "version": "1.0.0",
+  "description": "captcha like its 1848",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arc-blroth/baduibattles.git"
+  },
+  "keywords": [
+    "gold"
+  ],
+  "author": "Arc'blroth",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/arc-blroth/baduibattles/issues"
+  },
+  "homepage": "https://github.com/arc-blroth/baduibattles#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.0"
+  }
+}

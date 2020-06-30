@@ -1,0 +1,104 @@
+.center {
+	text-align: center;
+	margin: auto;
+}
+
+.abs-center {
+	position: absolute;
+	text-align: center;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: 'Hind', sans-serif;
+	color: black;
+	display: flex;
+	flex-direction: column;
+}
+
+.golden-ex-branding {
+	color: #997000;
+	animation-name: golden-ex-animation;
+	animation-duration: 2000ms;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
+
+@keyframes golden-ex-animation {
+  from { color: #997000; }
+  to { color: #cfa944; }
+}
+
+.golden-ex-branding-bg {
+	background-color: #997000;
+	animation-name: golden-ex-animation-bg;
+	animation-duration: 2000ms;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
+
+@keyframes golden-ex-animation-bg {
+  from { background-color: #997000; }
+  to { background-color: #cfa944; }
+}
+
+.motto {
+    font-style: italic;
+}
+
+.code {
+	font-family: 'Consolas', monospace;
+}
+
+.disclaimer {
+	font-size: 3vh;
+}
+
+.form {
+	width: 70%;
+}
+
+input.passive-agressive-error {
+    border-width: 2px;
+    border-color: #f54242;
+}
+
+input.passive-agressive-error:focus {
+    border-color: #f54242;
+    box-shadow: 0 0 0 0.2rem rgba(245, 66, 66, 0.25);
+}
+
+small.passive-agressive-error {
+    display: block;
+    color: #f54242!important;
+    font-size: 150%;
+}
+
+.usernameConfInfoBlock {
+    display: none;
+}
+
+.password {
+	width: 100%;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+}
+
+.tall-modal-content {
+    height: 70vh;
+    margin-bottom: 10px;
+}
+
+.mc-really-old-edition {
+    border: 1px black;
+    width: 100%;
+    height: 100%;
+}

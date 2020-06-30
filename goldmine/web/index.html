@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SignUp | GoldenExperienceCo.</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Hind&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="/stylesheet.css">
+		<link href="icon.png" rel="icon">
+	</head>
+	
+	<body class="golden-ex-branding-bg">
+	<div class="container h-100">
+		<div class="row align-items-center h-100">
+			<div class="col-12 mx-auto">
+				<div class="jumbotron" id="jumbotron">
+					<h3 class="mb-0 golden-ex-branding">Golden Experience Co.</h3>
+					<label id="motto" class="motto">Muda Muda Muda!</label>
+					<h1 class="display-4 mb-5">Sign Up</h1>
+					<form autocomplete="false" method="POST" role="form" data-toggle="validator" novalidate="true">
+					  <div class="form-group">
+						<label for="usernameIn">pick a username</label>
+						<input type="username" class="form-control" id="usernameIn" aria-describedby="usernameInfoBlock">
+						<small id="usernameInfoBlock" class="form-text text-muted">
+						  Usernames must match the regex <span class="code">/[a-xB-Z{420}{69}]+/m</span>.
+						</small>
+					  </div>
+					  <div class="form-group">
+						<label for="usernameConfIn">Confirm Username</label>
+						<input type="username" class="form-control" id="usernameConfIn">
+                        <small id="usernameConfInfoBlock" class="form-text text-muted usernameConfInfoBlock">
+						  Username must match.
+						</small>
+					  </div>
+					  <div class="form-group">
+						<label for="passwordIn">pick an PassWord</label>
+						<div>
+							<select name="passwordIn" id="passwordIn" class="password">
+							</select>
+						</div>
+						<small id="passwordInfoBlock" class="form-text text-muted">
+							If you would like another password, please wait 24 hours or <a href="https://github.com/qntm/base2048#Rationale" target="_blank">tweet support</a>.
+						</small>
+					  </div>
+					  <div class="form-group form-check" id="notBotCheckDiv" tabindex="0">
+						<input type="checkbox" class="form-check-input" id="notBotCheck">
+						<label class="form-check-label" for="notBotCheck" id="notBotCheckLabel">I'm a human</label>
+					  </div>
+					  <button type="submit" class="btn btn-primary" id="submit" disabled>Submit</button>
+					</form>
+				</div>
+			</div>
+		</div>
+        <div class="modal fade" id="captchaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Captcha</h5>
+                    </div>
+                    <div class="modal-body tall-modal-content">
+                        <p id="goldOreLeft">To continue, please mine at least 8 more gold ore.</p>
+                        <!-- Remember kids: CORS is client side only -->
+                        <iframe src="/minecraft-cors-defeater" class="mc-really-old-edition" id="mc-really-old-edition" role="application" allow="fullscreen" referrerpolicy="no-referrer" loading="lazy"></iframe>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous" defer></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous" defer></script>
+		<script src="https://unpkg.com/base2048@1/dist/iife/base2048.js" defer></script>
+		<script src="/index.js" type="module" defer></script>
+	</body>
+</html>
