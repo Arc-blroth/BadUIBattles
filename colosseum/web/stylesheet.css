@@ -1,0 +1,37 @@
+.center {
+	text-align: center;
+	margin: auto;
+}
+
+.abs-center {
+	position: absolute;
+	text-align: center;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: 'Hind', sans-serif;
+	color: black;
+	display: flex;
+	flex-direction: column;
+}
+
+.code {
+	font-family: 'Consolas', monospace;
+}
+
+.form {
+	width: 70%;
+}
+
+div.test {
+    width: 20%;
+    height: 20%;
+    background-color: aqua;
+}

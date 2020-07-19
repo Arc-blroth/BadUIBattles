@@ -1,0 +1,22 @@
+{
+  "name": "arcblroth-baduibattles3d-colosseum",
+  "version": "1.0.0",
+  "description": "In a world where UIs become reality, what will be the worst of them all?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/arc-blroth/baduibattles"
+  },
+  "keywords": [
+    "baduibattle"
+  ],
+  "author": "Arc'blroth",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  }
+}
