@@ -16,26 +16,18 @@ let engine = new Engine();
 let ele = document.createElement("div");
 ele.classList.add("test");
 document.body.append(ele);
+let perspective = 100;
 let angle = 0;
-let model = glMatrix.mat4.create();
 
 //glMatrix.mat4.perspective(glMatrix.mat4.create(), Math.PI / 8, 1, 0.1, 10)
 function animate() {
     requestAnimationFrame(animate);
     angle += 0.01;
-    let projection = glMatrix.mat4.fromTranslation(glMatrix.mat4.create(), [window.innerWidth / 2, window.innerHeight / 2, 0]);
-    let view = glMatrix.mat4.lookAt(glMatrix.mat4.create(), [50 * Math.sin(angle), 10, 50 * Math.cos(angle)], [0, 0, 0], [0, 1, 0]);
-    let mvp = glMatrix.mat4.multiply(glMatrix.mat4.create(), glMatrix.mat4.multiply(glMatrix.mat4.create(), projection, view), model);
-    ele.style.transform = mat4ToCss(mvp);
+    
+    ele.style.transform = buildCssTransform(10000, [window.innerWidth / 2, window.innerHeight / 2, 0], [angle, angle, angle]);
 }
-
 requestAnimationFrame(animate);
 
-function mat4ToCss(matrix) {
-    let out = "matrix3d(";
-    for(let i = 0; i < 15; i++) {
-        out += matrix[i] + ",";
-    }
-    out += matrix[15] + ")";
-    return out;
+function buildCssTransform(perspective, translation, rotation) {
+    return `perspective(${perspective}px) translate(-50%, -50%) translate3d(${translation[0]}px,${translation[1]}px,${translation[2]}px) rotateX(${rotation[0]}rad) rotateY(${rotation[1]}rad) rotateZ(${rotation[2]}rad)`;
 }
