@@ -17,11 +17,7 @@ let ele = document.createElement("div");
 ele.classList.add("test");
 document.body.append(ele);
 let model = glMatrix.mat4.fromTranslation(glMatrix.mat4.create(), [0, 0, 0]);
-let playerPos = [0, 0, 300];
-let cameraFront = [0, 0, -1];
-let cameraUp = [0, 1, 0];
-let yaw = -Math.PI/2;
-let pitch = 0;
+let camera = new Camera();
 let walkSpeed = 10;
 let mouseSensitivity = 0.01;
 let keysPressed = {};
@@ -30,27 +26,30 @@ let keysPressed = {};
 function animate() {
     requestAnimationFrame(animate);
     
-    cameraFront[0] = Math.cos(yaw) * Math.cos(pitch);
-    cameraFront[1] = Math.sin(pitch);
-    cameraFront[2] = Math.sin(yaw) * Math.cos(pitch);
-    cameraFront = glMatrix.vec3.normalize(glMatrix.vec3.create(), cameraFront);
-    let cameraRight = glMatrix.vec3.normalize(glMatrix.vec3.create(), glMatrix.vec3.cross(glMatrix.vec3.create(), cameraFront, [0, 1, 0]));
-    cameraUp = glMatrix.vec3.normalize(glMatrix.vec3.create(), glMatrix.vec3.cross(glMatrix.vec3.create(), cameraRight, cameraFront));
-    let previousY = playerPos[1];
-    if(keysPressed["w"] == true) {
-        playerPos = glMatrix.vec3.add(glMatrix.vec3.create(), playerPos, glMatrix.vec3.scale(glMatrix.vec3.create(), cameraFront, walkSpeed));
+    camera.updateVectors();
+    if(document.hasFocus()) {
+        if(keysPressed[87] == true) {
+            camera.moveX(walkSpeed);
+        }
+        if(keysPressed[83] == true) {
+            camera.moveX(-walkSpeed);
+        }
+        if(keysPressed[68] == true) {
+            camera.moveZ(walkSpeed);
+        }
+        if(keysPressed[65] == true) {
+            camera.moveZ(-walkSpeed);
+        }
+        if(keysPressed[32] == true) {
+            camera.moveY(-walkSpeed);
+        }
+        if(keysPressed[16] == true) {
+            camera.moveY(walkSpeed);
+        }
+    } else {
+        keysPressed = {};
     }
-    if(keysPressed["s"] == true) {
-        playerPos = glMatrix.vec3.subtract(glMatrix.vec3.create(), playerPos, glMatrix.vec3.scale(glMatrix.vec3.create(), cameraFront, walkSpeed));
-    }
-    if(keysPressed["a"] == true) {
-        playerPos = glMatrix.vec3.subtract(glMatrix.vec3.create(), playerPos, glMatrix.vec3.scale(glMatrix.vec3.create(), cameraRight, walkSpeed));
-    }
-    if(keysPressed["d"] == true) {
-        playerPos = glMatrix.vec3.add(glMatrix.vec3.create(), playerPos, glMatrix.vec3.scale(glMatrix.vec3.create(), cameraRight, walkSpeed));
-    }
-    playerPos[1] = previousY;
-    let view = glMatrix.mat4.lookAt(glMatrix.mat4.create(), playerPos, glMatrix.vec3.add(glMatrix.vec3.create(), playerPos, cameraFront), cameraUp);
+    let view = camera.getViewMatrix();
     let mvp = glMatrix.mat4.multiply(glMatrix.mat4.create(), view, model);
     ele.style.transform = mat4ToCss(window.innerWidth / 2, mvp);
 }
@@ -67,23 +66,25 @@ function mat4ToCss(perspective, matrix) {
 }
 
 document.onkeydown = (e) => {
-    keysPressed[e.key] = true;
+    keysPressed[e.keyCode] = true;
 };
 
 document.onkeyup = (e) => {
-    keysPressed[e.key] = false;
+    keysPressed[e.keyCode] = false;
 };
 
 document.onclick = () => {
     document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
     document.body.requestPointerLock();
-}
+};
 
 document.onmousemove = (e) => {
     if(document.pointerLockElement === document.body || document.mozPointerLockElement === document.body) {
-        yaw += mouseSensitivity * e.movementX;
-        pitch += mouseSensitivity * e.movementY;
+        camera.yaw += mouseSensitivity * e.movementX;
+        let pitch = camera.pitch + mouseSensitivity * e.movementY;
         if(pitch >  Math.PI / 2 - 0.01) pitch =  Math.PI / 2 - 0.01;
         if(pitch < -Math.PI / 2 + 0.01) pitch = -Math.PI / 2 + 0.01;
+        camera.pitch = pitch;
+        camera.updateVectors();
     }
 }
