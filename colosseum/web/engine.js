@@ -32,6 +32,7 @@ class Camera {
         this.movementFront = glMatrix.vec3.create();
         this.right = glMatrix.vec3.create();
         this.up = glMatrix.vec3.create();
+        this.perspective = glMatrix.mat4.perspective(glMatrix.mat4.create(), Math.PI / 800, 1, 0.1, 10);
         this.updateVectors();
     }
     
@@ -47,8 +48,9 @@ class Camera {
         this.up = glMatrix.vec3.normalize(glMatrix.vec3.create(), glMatrix.vec3.cross(glMatrix.vec3.create(), this.right, this.front));
     }
     
-    getViewMatrix() {
-        return glMatrix.mat4.lookAt(glMatrix.mat4.create(), this.pos, glMatrix.vec3.add(glMatrix.vec3.create(), this.pos, this.front), this.up);
+    getViewPerspectiveMatrix() {
+        let view = glMatrix.mat4.lookAt(glMatrix.mat4.create(), this.pos, glMatrix.vec3.add(glMatrix.vec3.create(), this.pos, this.front), this.up);
+        return glMatrix.mat4.multiply(glMatrix.mat4.create(), this.perspective, view);
     }
     
     moveX(amount) {
@@ -72,6 +74,32 @@ class UIBody {
     
     constructor(domElement) {
         this.domElement = domElement;
+        this.containerElement = document.createElement("div");
+        this.containerElement.classList.add("uibody-container");
+        document.body.append(this.containerElement);
+        this.containerElement.append(this.domElement);
+        this.position = glMatrix.vec3.create();
+        this.rotation = glMatrix.quat.fromEuler(glMatrix.quat.create(), 0, 0, 0);
+        this.scale = glMatrix.vec3.fromValues(1, 1, 1);
+    }
+    
+    updateTransform(camera) {
+        let model = glMatrix.mat4.fromRotationTranslationScale(glMatrix.mat4.create(), this.rotation, this.position, this.scale);
+        let viewPerspective = camera.getViewPerspectiveMatrix();
+        let mvp = glMatrix.mat4.multiply(glMatrix.mat4.create(), viewPerspective, model);
+        this.containerElement.style.transform = UIBody.mat4ToCss(mvp);
+        let actualOffsetWidth = (window.innerWidth - this.domElement.offsetWidth) / 2;
+        let actualOffsetHeight = (window.innerHeight - this.domElement.offsetHeight) / 2;
+        this.domElement.style.transform = `translate(${actualOffsetWidth}px, ${actualOffsetHeight}px)`;
+    }
+    
+    static mat4ToCss(matrix) {
+        let out = `matrix3d(`;
+        for(let i = 0; i < 15; i++) {
+            out += matrix[i] + ",";
+        }
+        out += matrix[15] + ")";
+        return out;
     }
     
 }

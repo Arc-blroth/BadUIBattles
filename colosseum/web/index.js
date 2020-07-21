@@ -13,14 +13,26 @@ let engine = new Engine();
 //             Event Handling              
 // ---------------------------------------- 
 
-let ele = document.createElement("div");
-ele.classList.add("test");
-document.body.append(ele);
-let model = glMatrix.mat4.fromTranslation(glMatrix.mat4.create(), [0, 0, 0]);
 let camera = new Camera();
-let walkSpeed = 10;
+let walkSpeed = 20;
 let mouseSensitivity = 0.01;
 let keysPressed = {};
+let ele1 = document.createElement("div");
+ele1.classList.add("test1");
+let ele1Body = new UIBody(ele1);
+let ele2 = document.createElement("div");
+ele2.classList.add("test2");
+let ele2Body = new UIBody(ele2);
+let ele3 = document.createElement("div");
+ele3.classList.add("test1");
+let ele3Body = new UIBody(ele3);
+
+ele1Body.position[2] = -1000;
+ele2Body.position[2] = -1000;
+ele2Body.position[1] = -1000;
+ele3Body.position[0] = -1500;
+ele3Body.position[2] =   500;
+ele3Body.rotation = glMatrix.quat.fromEuler(glMatrix.quat.create(), 0, 90, 0);
 
 //glMatrix.mat4.perspective(glMatrix.mat4.create(), Math.PI / 8, 1, 0.1, 10)
 function animate() {
@@ -46,23 +58,21 @@ function animate() {
         if(keysPressed[16] == true) {
             camera.moveY(walkSpeed);
         }
+        document.getElementById("pos").innerHTML = vec3ToDebugString(camera.pos) + "<br>" + vec3ToDebugString(camera.front);
     } else {
         keysPressed = {};
     }
-    let view = camera.getViewMatrix();
-    let mvp = glMatrix.mat4.multiply(glMatrix.mat4.create(), view, model);
-    ele.style.transform = mat4ToCss(window.innerWidth / 2, mvp);
+    
+    ele1Body.updateTransform(camera);
+    ele2Body.updateTransform(camera);
+    ele3Body.updateTransform(camera);
+    
 }
 
 requestAnimationFrame(animate);
 
-function mat4ToCss(perspective, matrix) {
-    let out = `perspective(${perspective}px) matrix3d(`;
-    for(let i = 0; i < 15; i++) {
-        out += matrix[i] + ",";
-    }
-    out += matrix[15] + ")";
-    return out;
+function vec3ToDebugString(vec3) {
+    return `${vec3[0].toFixed(2)}, ${vec3[1].toFixed(2)}, ${vec3[2].toFixed(2)}`;
 }
 
 document.onkeydown = (e) => {
@@ -87,4 +97,8 @@ document.onmousemove = (e) => {
         camera.pitch = pitch;
         camera.updateVectors();
     }
+}
+
+function tp(x, y, z) {
+    camera.pos = glMatrix.vec3.fromValues(x, y, z);
 }
