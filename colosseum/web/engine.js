@@ -3,6 +3,8 @@
 class Engine {
     
     constructor() {
+        this.camera = new Camera();
+        
         this.world = new CANNON.World();
         this.world.gravity.set(0, 0, -9.82);
 
@@ -18,6 +20,12 @@ class Engine {
     
     addUIBody(body) {
         this.uiBodies.push(body);   
+    }
+    
+    tick() {
+        this.uiBodies.forEach(uiBody => {
+            uiBody.updateTransform(this.camera);
+        });
     }
     
 }
