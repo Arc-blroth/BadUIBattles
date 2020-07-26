@@ -18,13 +18,13 @@ let keysPressed = {};
 
 let ele1 = document.createElement("div");
 ele1.classList.add("test1");
-let ele1Body = new UIBody(ele1);
+let ele1Body = new UIBody(ele1, 1000, 1000);
 let ele2 = document.createElement("div");
 ele2.classList.add("test1");
-let ele2Body = new UIBody(ele2);
+let ele2Body = new UIBody(ele2, 1000, 1000);
 let ele3 = document.createElement("div");
 ele3.classList.add("test1");
-let ele3Body = new UIBody(ele3);
+let ele3Body = new UIBody(ele3, 1000, 1000);
 
 ele1Body.position[2] = -1000;
 ele2Body.position[0] = -1500;

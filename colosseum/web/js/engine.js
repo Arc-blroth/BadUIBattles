@@ -80,34 +80,56 @@ class Camera {
 
 class UIBody {
     
-    constructor(domElement) {
+    constructor(domElement, width, height) {
         this.domElement = domElement;
         this.containerElement = document.createElement("div");
         this.containerElement.classList.add("uibody-container");
         document.body.append(this.containerElement);
         this.containerElement.append(this.domElement);
+        
         this.position = glMatrix.vec3.create();
         this.rotation = glMatrix.quat.fromEuler(glMatrix.quat.create(), 0, 0, 0);
         this.scale = glMatrix.vec3.fromValues(1, 1, 1);
+        
+        this.width = width || this.domElement.offsetWidth || 100;
+        this.height = height || this.domElement.offsetHeight || 100;
+        
+        this.shape = new CANNON.Box(new CANNON.Vec3(width, height, 1));
     }
     
     updateTransform(camera) {
         let model = glMatrix.mat4.fromRotationTranslationScale(glMatrix.mat4.create(), this.rotation, this.position, this.scale);
         let viewPerspective = camera.getViewPerspectiveMatrix();
         let mvp = glMatrix.mat4.multiply(glMatrix.mat4.create(), viewPerspective, model);
-        this.containerElement.style.transform = UIBody.mat4ToCss(mvp);
+        this.containerElement.style.transform = mat4ToCss(mvp);
         let actualOffsetWidth = (window.innerWidth - this.domElement.offsetWidth) / 2;
         let actualOffsetHeight = (window.innerHeight - this.domElement.offsetHeight) / 2;
         this.domElement.style.transform = `translate(${actualOffsetWidth}px, ${actualOffsetHeight}px)`;
     }
     
-    static mat4ToCss(matrix) {
-        let out = `matrix3d(`;
-        for(let i = 0; i < 15; i++) {
-            out += matrix[i] + ",";
-        }
-        out += matrix[15] + ")";
-        return out;
+    get width() {
+        return this.domElement.offsetWidth;
     }
     
+    get height() {
+        return this.domElement.offsetHeight;
+    }
+    
+    set width(width) {
+        this.domElement.style.width = width + "px";
+    }
+    
+    set height(height) {
+        this.domElement.style.height = height + "px";
+    }
+    
+}
+
+function mat4ToCss(matrix) {
+    let out = `matrix3d(`;
+    for(let i = 0; i < 15; i++) {
+        out += matrix[i] + ",";
+    }
+    out += matrix[15] + ")";
+    return out;
 }
