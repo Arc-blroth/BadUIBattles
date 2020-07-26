@@ -26,11 +26,9 @@ let ele3 = document.createElement("div");
 ele3.classList.add("test1");
 let ele3Body = new UIBody(ele3, 1000, 1000);
 
-ele1Body.position[2] = -1000;
-ele2Body.position[0] = -1500;
-ele2Body.position[2] = - 500;
-ele3Body.position[0] = -2000;
-ele3Body.position[2] =  1000;
+ele1Body.position = glMatrix.vec3.fromValues(    0, -1000, -1000);
+ele2Body.position = glMatrix.vec3.fromValues(-1500, -1000, - 500);
+ele3Body.position = glMatrix.vec3.fromValues(-2000, -1000,  1000);
 ele2Body.rotation = glMatrix.quat.fromEuler(glMatrix.quat.create(), 0, 45, 0);
 ele3Body.rotation = glMatrix.quat.fromEuler(glMatrix.quat.create(), 0, 90, 0);
 
@@ -41,43 +39,38 @@ engine.addUIBody(ele3Body);
 // ----------------------------------------
 //             Event Handling              
 // ---------------------------------------- 
-function animate() {
+function animate(currentTime) {
     requestAnimationFrame(animate);
     
     engine.camera.updateVectors();
     if(document.hasFocus()) {
         if(keysPressed[87] == true) {
-            engine.camera.moveX(walkSpeed);
+            engine.acceleratePlayer(engine.camera.getMoveXVec(walkSpeed));
         }
         if(keysPressed[83] == true) {
-            engine.camera.moveX(-walkSpeed);
+            engine.acceleratePlayer(engine.camera.getMoveXVec(-walkSpeed));
         }
         if(keysPressed[68] == true) {
-            engine.camera.moveZ(walkSpeed);
+            engine.acceleratePlayer(engine.camera.getMoveZVec(walkSpeed));
         }
         if(keysPressed[65] == true) {
-            engine.camera.moveZ(-walkSpeed);
+            engine.acceleratePlayer(engine.camera.getMoveZVec(-walkSpeed));
         }
         if(keysPressed[32] == true) {
-            engine.camera.moveY(-walkSpeed);
+            engine.acceleratePlayer(engine.camera.getMoveYVec(-walkSpeed));
         }
-        if(keysPressed[16] == true) {
-            engine.camera.moveY(walkSpeed);
-        }
-        document.getElementById("pos").innerHTML = vec3ToDebugString(engine.camera.pos);
+        //if(keysPressed[16] == true) {
+        //    engine.camera.moveY(walkSpeed);
+        //}
+        document.getElementById("pos").innerHTML = vec3ToDebugString(engine.camera.pos) + "<br>" + vec3ToDebugString(glFromCannonVec3(engine.playerBody.velocity));
     } else {
         keysPressed = {};
     }
     
-    engine.tick();
+    engine.tick(currentTime);
     
 }
-
 requestAnimationFrame(animate);
-
-function vec3ToDebugString(vec3) {
-    return `${vec3[0].toFixed(2)}, ${vec3[1].toFixed(2)}, ${vec3[2].toFixed(2)}`;
-}
 
 document.onkeydown = (e) => {
     keysPressed[e.keyCode] = true;

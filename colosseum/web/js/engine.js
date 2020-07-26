@@ -1,31 +1,70 @@
 "use strict";
 
+const fixedTimeStep = 1 / 60;
+const maxSubSteps = 100;
+
 class Engine {
     
     constructor() {
-        this.camera = new Camera();
-        
         this.world = new CANNON.World();
-        this.world.gravity.set(0, 0, -9.82);
-
-        let groundBody = new CANNON.Body({
-            mass: 0
+        this.world.gravity.set(0, 600, 0);
+        
+        this.groundMaterial = new CANNON.Material("groundMaterial");
+        this.groundToGroundContact = new CANNON.ContactMaterial(this.groundMaterial, this.groundMaterial, {
+            friction: 0.4,
+            restitution: 0.3,
+            contactEquationStiffness: 1e8,
+            contactEquationRelaxation: 3,
+            frictionEquationStiffness: 1e8,
+            frictionEquationRegularizationTime: 3,
         });
-        let groundShape = new CANNON.Plane();
-        groundBody.addShape(groundShape);
-        this.world.addBody(groundBody);
+        this.world.addContactMaterial(this.groundToGroundContact);
+        
+        this.groundShape = new CANNON.Box(new CANNON.Vec3(10000, 10, 10000));
+        this.groundBody = new CANNON.Body({ mass: 0, material: this.groundMaterial });
+        this.groundBody.addShape(this.groundShape);
+        this.world.addBody(this.groundBody);
+        
+        this.playerShape = new CANNON.Box(new CANNON.Vec3(100/2, 200/2, 100/2));
+        this.playerBody = new CANNON.Body({ mass: 1, material: this.groundMaterial });
+        this.playerBody.position.set(0, -200, 0);
+        this.playerBody.addShape(this.playerShape);
+        this.world.addBody(this.playerBody);
+        
+        this.camera = new Camera(this.playerBody);
         
         this.uiBodies = [];
+        
+        this.lastTickTime = performance.now();
     }
     
     addUIBody(body) {
-        this.uiBodies.push(body);   
+        this.uiBodies.push(body);
+        body.body.material = this.groundMaterial;
+        this.world.addBody(body.body);
     }
     
-    tick() {
+    acceleratePlayer(glVelocity) {
+        this.playerBody.velocity.setFromGl(glMatrix.vec3.add(
+            glMatrix.vec3.create(),
+            glFromCannonVec3(this.playerBody.velocity),
+            glVelocity
+        ));
+    }
+    
+    tick(currentTime) {
+        let dt = (currentTime - this.lastTickTime) / 1000;
+        this.world.step(fixedTimeStep, dt, maxSubSteps);
+        
+        this.playerBody.velocity.x *= 0.98;
+        this.playerBody.velocity.z *= 0.98;
+        this.camera.pos = glFromCannonVec3(this.playerBody.position);
+        
         this.uiBodies.forEach(uiBody => {
             uiBody.updateTransform(this.camera);
         });
+        
+        this.lastTickTime = currentTime;
     }
     
 }
@@ -61,19 +100,18 @@ class Camera {
         return glMatrix.mat4.multiply(glMatrix.mat4.create(), this.perspective, view);
     }
     
-    moveX(amount) {
-        this.pos = glMatrix.vec3.add(glMatrix.vec3.create(), this.pos, glMatrix.vec3.scale(glMatrix.vec3.create(), this.movementFront, amount));
+    getMoveXVec(amount) {
+        return glMatrix.vec3.scale(glMatrix.vec3.create(), this.movementFront, amount);
     }
     
-    moveY(amount) {
-        this.pos = glMatrix.vec3.add(glMatrix.vec3.create(), this.pos, [0, amount, 0]);
+    getMoveYVec(amount) {
+        return [0, amount, 0];
     }
     
-    moveZ(amount) {
-        let previousY = this.pos[1];
-        let tempPos = glMatrix.vec3.add(glMatrix.vec3.create(), this.pos, glMatrix.vec3.scale(glMatrix.vec3.create(), this.right, amount));
-        tempPos[1] = previousY;
-        this.pos = tempPos;
+    getMoveZVec(amount) {
+        let tempPos = glMatrix.vec3.scale(glMatrix.vec3.create(), this.right, amount);
+        tempPos[1] = 0;
+        return tempPos;
     }
     
 }
@@ -87,18 +125,26 @@ class UIBody {
         document.body.append(this.containerElement);
         this.containerElement.append(this.domElement);
         
-        this.position = glMatrix.vec3.create();
-        this.rotation = glMatrix.quat.fromEuler(glMatrix.quat.create(), 0, 0, 0);
-        this.scale = glMatrix.vec3.fromValues(1, 1, 1);
-        
         this.width = width || this.domElement.offsetWidth || 100;
         this.height = height || this.domElement.offsetHeight || 100;
         
-        this.shape = new CANNON.Box(new CANNON.Vec3(width, height, 1));
+        this.shape = new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, 0.5));
+        this.body = new CANNON.Body({ mass: 1 });
+        this.body.addShape(this.shape);
+        
+        this.positionVal = glMatrix.vec3.create();
+        this.rotationVal = glMatrix.quat.fromEuler(glMatrix.quat.create(), 0, 0, 0);
+        this.scale = glMatrix.vec3.fromValues(1, 1, 1);
     }
     
     updateTransform(camera) {
-        let model = glMatrix.mat4.fromRotationTranslationScale(glMatrix.mat4.create(), this.rotation, this.position, this.scale);
+        this.positionVal = glFromCannonVec3(this.body.position);
+        this.rotationVal[0] = this.body.quaternion.x;
+        this.rotationVal[1] = this.body.quaternion.y;
+        this.rotationVal[2] = this.body.quaternion.z;
+        this.rotationVal[3] = this.body.quaternion.w;
+        
+        let model = glMatrix.mat4.fromRotationTranslationScale(glMatrix.mat4.create(), this.rotationVal, this.positionVal, this.scale);
         let viewPerspective = camera.getViewPerspectiveMatrix();
         let mvp = glMatrix.mat4.multiply(glMatrix.mat4.create(), viewPerspective, model);
         this.containerElement.style.transform = mat4ToCss(mvp);
@@ -123,13 +169,22 @@ class UIBody {
         this.domElement.style.height = height + "px";
     }
     
-}
-
-function mat4ToCss(matrix) {
-    let out = `matrix3d(`;
-    for(let i = 0; i < 15; i++) {
-        out += matrix[i] + ",";
+    get position() {
+        return this.positionVal;
     }
-    out += matrix[15] + ")";
-    return out;
+    
+    get rotation() {
+        return this.rotationVal;
+    }
+    
+    set position(position) {
+        this.body.position.set(position[0], position[1], position[2]);
+        this.positionVal = position;
+    }
+    
+    set rotation(rotation) {
+        this.body.quaternion.set(rotation[0], rotation[1], rotation[2], rotation[3]);
+        this.rotationVal = rotation;
+    }
+    
 }
