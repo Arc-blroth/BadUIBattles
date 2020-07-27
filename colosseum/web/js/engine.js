@@ -7,16 +7,16 @@ class Engine {
     
     constructor() {
         this.world = new CANNON.World();
-        this.world.gravity.set(0, 600, 0);
+        this.world.gravity.set(0, 982, 0);
         
         this.groundMaterial = new CANNON.Material("groundMaterial");
         this.groundToGroundContact = new CANNON.ContactMaterial(this.groundMaterial, this.groundMaterial, {
-            friction: 0.4,
-            restitution: 0.3,
+            friction: 10,
+            restitution: 0,
             contactEquationStiffness: 1e8,
-            contactEquationRelaxation: 3,
-            frictionEquationStiffness: 1e8,
-            frictionEquationRegularizationTime: 3,
+            contactEquationRelaxation: 2,
+            frictionEquationStiffness: 1,
+            frictionEquationRegularizationTime: 4
         });
         this.world.addContactMaterial(this.groundToGroundContact);
         
@@ -26,8 +26,9 @@ class Engine {
         this.world.addBody(this.groundBody);
         
         this.playerShape = new CANNON.Box(new CANNON.Vec3(100/2, 200/2, 100/2));
-        this.playerBody = new CANNON.Body({ mass: 1, material: this.groundMaterial });
+        this.playerBody = new CANNON.Body({ mass: 1, material: this.groundMaterial, fixedRotation: true });
         this.playerBody.position.set(0, -200, 0);
+        this.playerBody.linearDamping = 0.4;
         this.playerBody.addShape(this.playerShape);
         this.world.addBody(this.playerBody);
         
@@ -41,6 +42,7 @@ class Engine {
     addUIBody(body) {
         this.uiBodies.push(body);
         body.body.material = this.groundMaterial;
+        body.body.linearDamping = 0.2;
         this.world.addBody(body.body);
     }
     
@@ -56,8 +58,9 @@ class Engine {
         let dt = (currentTime - this.lastTickTime) / 1000;
         this.world.step(fixedTimeStep, dt, maxSubSteps);
         
-        this.playerBody.velocity.x *= 0.98;
-        this.playerBody.velocity.z *= 0.98;
+        this.playerBody.velocity.x *= 0.93;
+        this.playerBody.velocity.z *= 0.93;
+        this.playerBody.acceleratedThisTick = false;
         this.camera.pos = glFromCannonVec3(this.playerBody.position);
         
         this.uiBodies.forEach(uiBody => {
@@ -129,7 +132,7 @@ class UIBody {
         this.height = height || this.domElement.offsetHeight || 100;
         
         this.shape = new CANNON.Box(new CANNON.Vec3(width / 2, height / 2, 0.5));
-        this.body = new CANNON.Body({ mass: 1 });
+        this.body = new CANNON.Body({ mass: 0 });
         this.body.addShape(this.shape);
         
         this.positionVal = glMatrix.vec3.create();

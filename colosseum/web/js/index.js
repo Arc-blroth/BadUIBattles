@@ -8,7 +8,7 @@
 //                Globals                  
 // ---------------------------------------- 
 let engine = new Engine();
-const walkSpeed = 20;
+const walkSpeed = 120;
 const mouseSensitivity = 0.01;
 let keysPressed = {};
 
@@ -26,9 +26,9 @@ let ele3 = document.createElement("div");
 ele3.classList.add("test1");
 let ele3Body = new UIBody(ele3, 1000, 1000);
 
-ele1Body.position = glMatrix.vec3.fromValues(    0, -1000, -1000);
-ele2Body.position = glMatrix.vec3.fromValues(-1500, -1000, - 500);
-ele3Body.position = glMatrix.vec3.fromValues(-2000, -1000,  1000);
+ele1Body.position = glMatrix.vec3.fromValues(    0, -500, -1000);
+ele2Body.position = glMatrix.vec3.fromValues(-1500, -500, - 500);
+ele3Body.position = glMatrix.vec3.fromValues(-2000, -500,  1000);
 ele2Body.rotation = glMatrix.quat.fromEuler(glMatrix.quat.create(), 0, 45, 0);
 ele3Body.rotation = glMatrix.quat.fromEuler(glMatrix.quat.create(), 0, 90, 0);
 
