@@ -19,6 +19,7 @@ html, body {
 body {
 	font-family: 'Hind', sans-serif;
 	color: black;
+    background-color: #abddff;
 	display: block;
 }
 
@@ -44,10 +45,14 @@ body {
     transform: translate(50vw, 50vh);
 }
 
+.sky {
+    background: linear-gradient(180deg, rgba(132,205,255,1) 0%, rgba(182,221,247,1) 50%, rgba(0,0,0,1) 64%);
+}
+
 .test1 {
     width: 100%;
     height: 100%;
-    background-color: aqua;
+    background-color: #569943;
 }
 
 .test2 {

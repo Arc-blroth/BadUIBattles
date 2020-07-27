@@ -2,6 +2,10 @@
 
 const fixedTimeStep = 1 / 60;
 const maxSubSteps = 100;
+const skyGradientColors = ["#84cdff", "#b6ddf7", "#000000"];
+const skyGradientStops = [0, 50, 64];
+const viewBobDuration = 100;
+const viewBobIntensity = 20;
 
 class Engine {
     
@@ -31,6 +35,7 @@ class Engine {
         this.playerBody.linearDamping = 0.4;
         this.playerBody.addShape(this.playerShape);
         this.world.addBody(this.playerBody);
+        this.isPlayerMoving = false;
         this.isPlayerOnGround = true;
         
         this.playerBody.addEventListener("collide", (e) => {
@@ -65,6 +70,7 @@ class Engine {
             glFromCannonVec3(this.playerBody.velocity),
             glVelocity
         ));
+        this.isPlayerMoving = true;
     }
     
     tick(currentTime) {
@@ -73,14 +79,19 @@ class Engine {
         
         this.playerBody.velocity.x *= 0.93;
         this.playerBody.velocity.z *= 0.93;
-        this.playerBody.acceleratedThisTick = false;
         this.camera.pos = glFromCannonVec3(this.playerBody.position);
+        this.camera.updateViewBob(currentTime, this.isPlayerMoving && this.isPlayerOnGround);
+        this.isPlayerMoving = false;
         
         this.uiBodies.forEach(uiBody => {
             uiBody.updateTransform(this.camera);
         });
         
         this.lastTickTime = currentTime;
+    }
+    
+    setSkyColor(colorOrR, g, b) {
+        document.body.backgroundColor = b === undefined ? colorOrR : `rgb(${colorOrR},${g},${b})`;
     }
     
 }
@@ -96,6 +107,9 @@ class Camera {
         this.right = glMatrix.vec3.create();
         this.up = glMatrix.vec3.create();
         this.perspective = glMatrix.mat4.perspective(glMatrix.mat4.create(), Math.PI / 800, 1, 0.1, 10);
+        this.viewBobProgress = 0;
+        this.viewBobStartTime = 0;
+        this.viewBobUpdating = false;
         this.updateVectors();
     }
     
@@ -111,9 +125,28 @@ class Camera {
         this.up = glMatrix.vec3.normalize(glMatrix.vec3.create(), glMatrix.vec3.cross(glMatrix.vec3.create(), this.right, this.front));
     }
     
+    updateViewBob(currentTime, isPlayerMoving) {
+        // Update viewBob when player is moving and the viewBob is around 0
+        if(isPlayerMoving && !this.viewBobUpdating) {
+            this.viewBobStartTime = currentTime;
+            this.viewBobUpdating = true;
+        }
+        let elapsed = currentTime - this.viewBobStartTime;
+        if(!isPlayerMoving && this.viewBobUpdating && (elapsed % viewBobDuration <= 5 || elapsed % viewBobDuration >= viewBobDuration - 5)) {
+            this.viewBobUpdating = false;
+        }
+        if(this.viewBobUpdating) {
+            this.viewBobProgress = elapsed / viewBobDuration;
+        }
+    }
+    
     getViewPerspectiveMatrix() {
         let view = glMatrix.mat4.lookAt(glMatrix.mat4.create(), this.pos, glMatrix.vec3.add(glMatrix.vec3.create(), this.pos, this.front), this.up);
-        return glMatrix.mat4.multiply(glMatrix.mat4.create(), this.perspective, view);
+        let viewWithBob = glMatrix.mat4.multiply(glMatrix.mat4.create(), glMatrix.mat4.fromTranslation(
+            glMatrix.mat4.create(),
+            glMatrix.vec3.fromValues(Math.sin(this.viewBobProgress) * viewBobIntensity, Math.abs(Math.cos(this.viewBobProgress)) * viewBobIntensity, 0)
+        ), view);
+        return glMatrix.mat4.multiply(glMatrix.mat4.create(), this.perspective, viewWithBob);
     }
     
     getMoveXVec(amount) {

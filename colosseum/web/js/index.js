@@ -89,12 +89,14 @@ document.onclick = () => {
 
 document.onmousemove = (e) => {
     if(document.pointerLockElement === document.body || document.mozPointerLockElement === document.body) {
-        engine.camera.yaw += mouseSensitivity * e.movementX;
-        let pitch = engine.camera.pitch + mouseSensitivity * e.movementY;
-        if(pitch >  Math.PI / 2) pitch =  Math.PI / 2;
-        if(pitch < -Math.PI / 2) pitch = -Math.PI / 2;
-        engine.camera.pitch = pitch;
-        engine.camera.updateVectors();
+        if(e.movementX) {
+            engine.camera.yaw += mouseSensitivity * e.movementX;
+            let pitch = engine.camera.pitch + mouseSensitivity * e.movementY;
+            if(pitch >  Math.PI / 2) pitch =  Math.PI / 2;
+            if(pitch < -Math.PI / 2) pitch = -Math.PI / 2;
+            engine.camera.pitch = pitch;
+            engine.camera.updateVectors();
+        }
     }
 }
 
