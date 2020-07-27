@@ -20,14 +20,14 @@ class Engine {
         });
         this.world.addContactMaterial(this.groundToGroundContact);
         
-        this.groundShape = new CANNON.Box(new CANNON.Vec3(10000, 10, 10000));
+        this.groundShape = new CANNON.Box(new CANNON.Vec3(10000, 1000, 10000));
         this.groundBody = new CANNON.Body({ mass: 0, material: this.groundMaterial });
         this.groundBody.addShape(this.groundShape);
         this.world.addBody(this.groundBody);
         
         this.playerShape = new CANNON.Box(new CANNON.Vec3(100/2, 200/2, 100/2));
         this.playerBody = new CANNON.Body({ mass: 1, material: this.groundMaterial, fixedRotation: true });
-        this.playerBody.position.set(0, -200, 0);
+        this.playerBody.position.set(0, -this.groundShape.halfExtents.y - this.playerShape.halfExtents.y, 0);
         this.playerBody.linearDamping = 0.4;
         this.playerBody.addShape(this.playerShape);
         this.world.addBody(this.playerBody);
