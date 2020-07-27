@@ -7,7 +7,7 @@ class Engine {
     
     constructor() {
         this.world = new CANNON.World();
-        this.world.gravity.set(0, 982, 0);
+        this.world.gravity.set(0, 9820 * 2/3, 0);
         
         this.groundMaterial = new CANNON.Material("groundMaterial");
         this.groundToGroundContact = new CANNON.ContactMaterial(this.groundMaterial, this.groundMaterial, {
@@ -31,6 +31,19 @@ class Engine {
         this.playerBody.linearDamping = 0.4;
         this.playerBody.addShape(this.playerShape);
         this.world.addBody(this.playerBody);
+        this.isPlayerOnGround = true;
+        
+        this.playerBody.addEventListener("collide", (e) => {
+            if(e.contact.bj.id == this.playerBody.id) {
+               if(e.contact.rj.y > 0) {
+                   this.isPlayerOnGround = true;
+               }
+            } else {
+                if(e.contact.ri.y > 0) {
+                   this.isPlayerOnGround = true;
+               }
+            }
+        });
         
         this.camera = new Camera(this.playerBody);
         

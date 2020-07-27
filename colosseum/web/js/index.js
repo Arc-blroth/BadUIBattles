@@ -8,7 +8,8 @@
 //                Globals                  
 // ---------------------------------------- 
 let engine = new Engine();
-const walkSpeed = 120;
+const walkSpeed = 100;
+const jumpMulti = 18;
 const mouseSensitivity = 0.01;
 let keysPressed = {};
 
@@ -56,8 +57,9 @@ function animate(currentTime) {
         if(keysPressed[65] == true) {
             engine.acceleratePlayer(engine.camera.getMoveZVec(-walkSpeed));
         }
-        if(keysPressed[32] == true) {
-            engine.acceleratePlayer(engine.camera.getMoveYVec(-walkSpeed));
+        if(keysPressed[32] == true && engine.isPlayerOnGround) {
+            engine.acceleratePlayer(engine.camera.getMoveYVec(-walkSpeed * jumpMulti));
+            engine.isPlayerOnGround = false;
         }
         //if(keysPressed[16] == true) {
         //    engine.camera.moveY(walkSpeed);
@@ -101,5 +103,5 @@ document.onmousemove = (e) => {
 // ---------------------------------------- 
 
 function tp(x, y, z) {
-    engine.camera.pos = glMatrix.vec3.fromValues(x, y, z);
+    engine.playerBody.position.setFromGl(glMatrix.vec3.fromValues(x, y, z));
 }
