@@ -17,7 +17,7 @@ function glFromCannonVec3(cannonVec3) {
     return glMatrix.vec3.fromValues(cannonVec3.x, cannonVec3.y, cannonVec3.z);
 }
 
-CANNON.Vec3.prototype.fromGl = function(glVec3) {
+CANNON.Vec3.fromGl = function(glVec3) {
     return new CANNON.Vec3(glVec3[0], glVec3[1], glVec3[2]);
 }
 

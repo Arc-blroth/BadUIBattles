@@ -3,11 +3,13 @@
 // ----------------------------------------
 //          Imports and Polyfills          
 // ----------------------------------------
+var engine;
+function onYouTubeIframeAPIReady() { // wait for youtube to load
 
 // ----------------------------------------
 //                Globals                  
 // ---------------------------------------- 
-let engine = new Engine();
+engine = new Engine();
 const walkSpeed = 100;
 const jumpMulti = 18;
 const mouseSensitivity = 0.01;
@@ -20,9 +22,7 @@ let keysPressed = {};
 let ele1 = document.createElement("div");
 ele1.classList.add("test1");
 let ele1Body = new UIBody(ele1, 1000, 1000);
-let ele2 = document.createElement("div");
-ele2.classList.add("test1");
-let ele2Body = new UIBody(ele2, 1000, 1000);
+let ele2Body = new YoutubeUIBody("dQw4w9WgXcQ", 1000, 1000);
 let ele3 = document.createElement("div");
 ele3.classList.add("test1");
 let ele3Body = new UIBody(ele3, 1000, 1000);
@@ -83,9 +83,17 @@ document.onkeyup = (e) => {
 };
 
 document.onclick = () => {
+    if(document.pointerLockElement === document.body || document.mozPointerLockElement === document.body) {
+        engine.click();
+    } else {
+        requestPointerLock();
+    }
+};
+
+function requestPointerLock() {
     document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
     document.body.requestPointerLock();
-};
+}
 
 document.onmousemove = (e) => {
     if(document.pointerLockElement === document.body || document.mozPointerLockElement === document.body) {
@@ -107,3 +115,5 @@ document.onmousemove = (e) => {
 function tp(x, y, z) {
     engine.playerBody.position.setFromGl(glMatrix.vec3.fromValues(x, y, z));
 }
+
+}; // end youtube loading function

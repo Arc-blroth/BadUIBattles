@@ -6,6 +6,7 @@ const skyGradientColors = ["#84cdff", "#b6ddf7", "#000000"];
 const skyGradientStops = [0, 50, 64];
 const viewBobDuration = 100;
 const viewBobIntensity = 20;
+const reach = 1200;
 
 class Engine {
     
@@ -52,13 +53,13 @@ class Engine {
         
         this.camera = new Camera(this.playerBody);
         
-        this.uiBodies = [];
+        this.uiBodies = {};
         
         this.lastTickTime = performance.now();
     }
     
     addUIBody(body) {
-        this.uiBodies.push(body);
+        this.uiBodies[body.body.id] = body;
         body.body.material = this.groundMaterial;
         body.body.linearDamping = 0.2;
         this.world.addBody(body.body);
@@ -83,11 +84,44 @@ class Engine {
         this.camera.updateViewBob(currentTime, this.isPlayerMoving && this.isPlayerOnGround);
         this.isPlayerMoving = false;
         
-        this.uiBodies.forEach(uiBody => {
+        Object.values(this.uiBodies).forEach(uiBody => {
             uiBody.updateTransform(this.camera);
         });
         
         this.lastTickTime = currentTime;
+    }
+    
+    click() {
+        let result = new CANNON.RaycastResult();
+        let max = CANNON.Vec3.fromGl(
+            glMatrix.vec3.add(glMatrix.vec3.create(), glFromCannonVec3(this.playerBody.position), glMatrix.vec3.scale(glMatrix.vec3.create(), this.camera.front, reach))
+        );
+        let secondResultFound = false;
+        let hit = this.world.raycastAll(this.playerBody.position, max, {}, (result) => {
+            if(!secondResultFound && result.body.id !== this.playerBody.id) {
+                secondResultFound = true;
+                let uiBody = this.uiBodies[result.body.id];
+                if(uiBody !== undefined) {
+                    
+                    //resolve point on element code
+                    //let model = glMatrix.mat4.invert(glMatrix.mat4.create(), glMatrix.mat4.fromRotationTranslation(glMatrix.mat4.create(), uiBody.rotation, uiBody.position));
+                    //let pointOnBodyMatrix = glMatrix.mat4.multiply(glMatrix.mat4.create(), model, glMatrix.mat4.fromTranslation(glMatrix.mat4.create(), glFromCannonVec3(result.hitPointWorld)));
+                    //let pointOnBody = glMatrix.mat4.getTranslation(glMatrix.vec3.create(), pointOnBodyMatrix);
+                    
+                    if(uiBody.domElement instanceof HTMLIFrameElement) {
+                        if(uiBody instanceof YoutubeUIBody) {
+                            uiBody.togglePlayback();
+                        } else {
+                            document.exitPointerLock();
+                            uiBody.domElement.focus();
+                        }
+                    } else {
+                        document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2).click();
+                        document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2).focus();
+                    }
+                }
+            }
+        });
     }
     
     setSkyColor(colorOrR, g, b) {
@@ -234,6 +268,54 @@ class UIBody {
     set rotation(rotation) {
         this.body.quaternion.set(rotation[0], rotation[1], rotation[2], rotation[3]);
         this.rotationVal = rotation;
+    }
+    
+}
+
+class YoutubeUIBody extends UIBody {
+    
+    constructor(videoId, width, height) {
+        let placeholderEle = document.createElement("div");
+        placeholderEle.id = "video_" + videoId;
+        super(placeholderEle, width, height);
+        this.isReady = false;
+        new Promise((resolve) => {
+            this.player = new YT.Player(placeholderEle.id, {
+                width: width,
+                height: height,
+                videoId: videoId,
+                events: {
+                    "onReady": (event) => {
+                        resolve(event.target);
+                    }
+                }
+            });
+        }).then((target) => {
+            this.isReady = true;
+            this.domElement = target.getIframe();
+        });
+    }
+    
+    play() {
+        if(this.isReady) {
+            this.player.playVideo();
+        }
+    }
+    
+    pause() {
+        if(this.isReady) {
+            this.player.pauseVideo();
+        }
+    }
+    
+    togglePlayback() {
+        if(this.isReady) {
+            if(this.player.getPlayerState() == 1) {
+                this.player.pauseVideo();
+            } else {
+                this.player.playVideo();
+            }
+        }
     }
     
 }
