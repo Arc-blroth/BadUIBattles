@@ -234,6 +234,10 @@ class UIBody {
         let actualOffsetWidth = (window.innerWidth - this.domElement.offsetWidth) / 2;
         let actualOffsetHeight = (window.innerHeight - this.domElement.offsetHeight) / 2;
         this.domElement.style.transform = `translate(${actualOffsetWidth}px, ${actualOffsetHeight}px)`;
+        
+        let distFromCamera = glMatrix.vec3.distance(camera.pos, this.positionVal);
+        if(distFromCamera < 1) distFromCamera = 1;
+        this.containerElement.style.zIndex = -1 * Math.round(distFromCamera);
     }
     
     get width() {

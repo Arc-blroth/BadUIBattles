@@ -23,17 +23,12 @@ body {
 	display: block;
 }
 
-.code {
-	font-family: 'Consolas', monospace;
-}
-
-.form {
-	width: 70%;
+.ui {
+    position: absolute;
+    z-index: 1000;
 }
 
 .debug-text {
-    position: absolute;
-    z-index: 1000;
 	font-family: 'Consolas', monospace;
     background-color: #cccccc99;
 }
