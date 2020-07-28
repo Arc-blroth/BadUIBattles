@@ -15,6 +15,12 @@ window.onYouTubeIframeAPIReady = () => {
 
 (function() {
     
+    // Run-length encoded logo, 99x18
+    const ARCBLROTH = {};
+    ARCBLROTH.image = atob("CgIcAgMDCQIkAgsEGwIDAwkCIwMKBRoDAgQIAyMDCQYaAwIDCQMbAgUECQYZAwIECAQaAwUDCQcZAwIECAMaAwUECAgGAwkDBAICBwUEBAMJBAMJAgYGAwIDBQMJBQcHBQMEAwkGAQkCCAQDAwMFBwQHBQMCBAMEBAcEBwMEBQMCAwMEAwMECAMFCAMDAwMEAwgDBAEDAgQGAwIDAwQDAwQEAgMBBQgDBAMDAwQEAgMBBAMCAgQFAwMDAgsEBAIDAQQJAwQDAwMEBAIDAQMEAgIEBQMCBAEMAwUGBAgDBAQCBAMFBgIFAgIDBQQCAwIMAwQHBAgCBQQCBAMEBwIEAwIDBQMDAwEFBAQCBQcECAIEBAMEAgUHAgMEAgMEBAIEAQQFBAIECAQIAwIEBAQCBAgDAQQDAwQEAgMCAwcDAQUJBAcIBQMCBQgHBAQDAwMDAgIIAwEECwQHBgYDAgQKBQYEAgMDAwI=");
+    ARCBLROTH.width = 99;
+    ARCBLROTH.height = 18;
+    
     const requiredStylesheets = [
         "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css",
         "/stylesheet.css"
@@ -29,14 +35,18 @@ window.onYouTubeIframeAPIReady = () => {
         "/js/index.js"
     ];
     
-    function buildDiv(classList = []) {
-        let div = document.createElement("div");
+    function buildElement(type, classList = []) {
+        let ele = document.createElement(type);
         if(classList.length > 0) {
             classList.forEach(clazz => {
-               div.classList.add(clazz); 
+               ele.classList.add(clazz); 
             });
         }
-        return div;
+        return ele;
+    }
+    
+    function buildDiv(classList = []) {
+        return buildElement("div", classList);
     }
     
     class ProgressBar {
@@ -66,9 +76,34 @@ window.onYouTubeIframeAPIReady = () => {
         
     }
     
+    function redrawLogo(logoCanvas) {
+        let actualWidth = getComputedStyle(logoCanvas).getPropertyValue("width").slice(0, -2);
+        let actualHeight = getComputedStyle(logoCanvas).getPropertyValue("height").slice(0, -2);
+        let scale = Math.ceil((actualWidth < actualHeight ? actualWidth / ARCBLROTH.width : actualHeight / ARCBLROTH.height) * window.devicePixelRatio);
+        logoCanvas.width = ARCBLROTH.width * scale;
+        logoCanvas.height = ARCBLROTH.height * scale;
+        let logo = logoCanvas.getContext("2d");
+        let logoX = -1;
+        let logoY = 0;
+        let zeroOrOne = false;
+        for(let i = 0; i < ARCBLROTH.image.length; i++) {
+            let bit = ARCBLROTH.image.charCodeAt(i);
+            logo.fillStyle = zeroOrOne ? "#17c1ff" : "#0000";
+            for(let j = 0; j < bit; j++) {
+                logoX++;
+                if(logoX > ARCBLROTH.width - 1) {
+                    logoX = 0;
+                    logoY++;
+                }
+                logo.fillRect(logoX * scale, logoY * scale, scale, scale);
+            }
+            zeroOrOne = !zeroOrOne;
+        }
+    }
+    
     function loadStylesheet(styleSrc) {
         return new Promise((resolve, reject) => {
-            let styleTag = document.createElement('link');
+            let styleTag = buildElement('link');
             let whenLoaded = () => {
                 resolve(styleSrc);
             };
@@ -82,7 +117,7 @@ window.onYouTubeIframeAPIReady = () => {
     
     function loadScript(scriptSrc) {
         return new Promise((resolve, reject) => {
-            let scriptTag = document.createElement('script');
+            let scriptTag = buildElement('script');
             let whenLoaded = () => {
                 resolve(scriptSrc);
             };
@@ -104,6 +139,12 @@ window.onYouTubeIframeAPIReady = () => {
     function load() {
         let loadScreenBg = buildDiv(["ui", "loadScreenBg"]);
         document.body.append(loadScreenBg);
+        
+        // Decode 
+        let logoCanvas = buildElement("canvas", ["ui", "logo"]);
+        document.body.append(logoCanvas);
+        redrawLogo(logoCanvas);
+        window.onresize = () => { redrawLogo(logoCanvas); };
         
         // 20% stylesheets | 80% scripts
         let progressBar = new ProgressBar();
@@ -134,9 +175,12 @@ window.onYouTubeIframeAPIReady = () => {
                         delete window.isYoutubeAPILoaded;
                         
                         progressBar.bar.ontransitionend = () => {
+                            logoCanvas.style.opacity = "0%";
                             loadScreenBg.style.opacity = "0%";
                             progressBar.track.style.opacity = "0%";
                             setTimeout(() => {
+                                window.onresize = () => {};
+                                logoCanvas.parentElement.removeChild(logoCanvas);
                                 progressBar.remove();
                                 loadScreenBg.parentElement.removeChild(loadScreenBg);
                                 document.body.requestPointerLock();

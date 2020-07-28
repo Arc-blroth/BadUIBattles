@@ -22,6 +22,17 @@ body {
     transition: opacity 1000ms;
 }
 
+.logo {
+    width: 50%;
+    height: 30%;
+    left: 50%;
+    top: 33%;
+    transform: translate(-50%, -50%);
+    background-color: #0000;
+    object-fit: contain;
+    transition: opacity 1000ms;
+}
+
 .progressBar {
     width: 70%;
     height: 25px;
