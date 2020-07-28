@@ -1,0 +1,43 @@
+html, body {
+	height: 100%;
+    overflow: hidden;
+}
+
+body {
+	color: black;
+    background-color: black;
+	display: block;
+}
+
+.ui {
+    position: absolute;
+    z-index: 1000;
+}
+
+.loadScreenBg {
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    opacity: 100%;
+    transition: opacity 1000ms;
+}
+
+.progressBar {
+    width: 70%;
+    height: 25px;
+    left: 50%;
+    top: 70%;
+    transform: translate(-50%, -50%);
+    background-color: #232425;
+    border-radius: 1px;
+    opacity: 100%;
+    transition: opacity 1000ms;
+}
+
+.progressBar > div {
+    position: relative;
+    display: block;
+    transition: width 500ms;
+    height: 100%;
+    background-color: #17c1ff;
+}

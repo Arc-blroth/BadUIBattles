@@ -1,5 +1,7 @@
 "use strict";
 
+document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
+
 function mat4ToCss(matrix) {
     let out = `matrix3d(`;
     for(let i = 0; i < 15; i++) {

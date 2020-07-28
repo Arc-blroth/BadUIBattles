@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Hind&display=swap");
+
 .center {
 	text-align: center;
 	margin: auto;
@@ -9,23 +11,6 @@
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-}
-
-html, body {
-	height: 100%;
-    overflow: hidden;
-}
-
-body {
-	font-family: 'Hind', sans-serif;
-	color: black;
-    background-color: #abddff;
-	display: block;
-}
-
-.ui {
-    position: absolute;
-    z-index: 1000;
 }
 
 .debug-text {
