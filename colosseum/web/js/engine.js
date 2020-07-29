@@ -56,6 +56,8 @@ class Engine {
         this.bodies = {};
         this.uiBodies = {};
         
+        this.level = null;
+        this.controller = null;
         this.lastTickTime = performance.now();
     }
     
@@ -86,7 +88,12 @@ class Engine {
     
     loadLevel(levelName) {
         this.clearBodies();
-        window.levels[levelName].load(this);
+        this.level = window.levels[levelName];
+        if(this.level) {
+            this.controller = this.level.load(this);
+        } else {
+            this.controller = null;
+        }
     }
     
     acceleratePlayer(glVelocity) {
@@ -102,6 +109,9 @@ class Engine {
         let dt = (currentTime - this.lastTickTime) / 1000;
         
         this.playerBody.quaternion.setFromEuler(0, this.camera.pitch, 0, "XYZ");
+        if(this.controller) {
+            this.controller.tick(currentTime);
+        }
         
         this.world.step(fixedTimeStep, dt, maxSubSteps);
         

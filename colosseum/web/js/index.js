@@ -1,8 +1,5 @@
 "use strict";
 
-// ----------------------------------------
-//          Imports and Polyfills          
-// ----------------------------------------
 var engine;
 
 function main() { // called in load.js
@@ -19,8 +16,7 @@ let keysPressed = {};
 //                Content                  
 // ---------------------------------------- 
 
-document.body.style.backgroundColor = "#abddff";
-engine.loadLevel("testing-room");
+engine.loadLevel("prologue");
 
 // ----------------------------------------
 //             Event Handling              
@@ -88,6 +84,9 @@ document.onmousemove = (e) => {
     }
 }
 
+}; // end main function
+
+
 // ----------------------------------------
 //               Cheat Codes               
 // ---------------------------------------- 
@@ -95,5 +94,3 @@ document.onmousemove = (e) => {
 function tp(x, y, z) {
     engine.playerBody.position.setFromGl(glMatrix.vec3.fromValues(x, y, z));
 }
-
-}; // end main function

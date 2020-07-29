@@ -14,7 +14,28 @@ class Level {
             throw "A level source file must contain exactly 1 top-level <level> tag."
         }
         
-        this.name = rootTag.getAttribute("name")    || "[Level Name]";
+        this.name = rootTag.getAttribute("name") || "[Level Name]";
+    }
+    
+    _initController() {
+        let controlSrc = this.levelXML.children[0].getAttribute("controller") || null;
+        if(controlSrc) {
+            return this.loadScript(controlSrc).catch((error) => {
+                console.error("[Level] Failed to load controller " + controlSrc);
+                this.controllerClass = LevelController;
+                throw "Failed to load controller " + controlSrc;
+            }).then(() => {
+                if(this.controllerClass === null || this.controllerClass === undefined) {
+                    console.error("[Level] Failed to load controller " + controlSrc + ": "
+                        + "this.controllerClass is null or undefined."
+                    );
+                    this.controllerClass = LevelController; 
+                }
+            });
+        } else {
+            this.controllerClass = LevelController;
+            return new Promise((resolve) => { resolve() });
+        }
     }
     
     load(engine) {
@@ -22,6 +43,7 @@ class Level {
         
         // if you're wondering why there's so many Number()'s
         // its because javascript is stupid.
+        let bgColor     =        rootTag.getAttribute("bgColor")     || "#abddff";
         let playerX     = Number(rootTag.getAttribute("playerX")     || 0);
         let playerY     = Number(rootTag.getAttribute("playerY")     || 0);
         let playerZ     = Number(rootTag.getAttribute("playerZ")     || 0);
@@ -29,6 +51,7 @@ class Level {
         let playerPitch = Number(rootTag.getAttribute("playerPitch") || 0);
         engine.camera.yaw = playerYaw * Math.PI;
         engine.camera.pitch = playerPitch * Math.PI;
+        document.body.style.backgroundColor = bgColor;
         
         for(let i = 0; i < rootTag.children.length; i++) {
             let bodyTag = rootTag.children[i];
@@ -71,6 +94,21 @@ class Level {
                 console.warning("[Level] Unrecognized tag: " + bodyTag.tagName);
             }
         }
+        
+        return this.controllerClass ? new this.controllerClass(engine, this) : null;
+    }
+    
+}
+
+class LevelController {
+    
+    constructor(engine, level) {
+        this.engine = engine;
+        this.level = level;
+    }
+    
+    tick(currentTime) {
+        
     }
     
 }

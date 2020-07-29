@@ -41,10 +41,9 @@ window.levels = {};
     ];
     
     const requiredLevels = [
-        "/mapdata/testing-room.xml"
+        "/mapdata/testing-room.xml",
+        "/mapdata/prologue.xml"
     ];
-    
-    const levelLoadingError = "Failed to load level data, please reload and try again.";
     
     function buildElement(type, classList = []) {
         let ele = document.createElement(type);
@@ -120,6 +119,9 @@ window.levels = {};
             };
             styleTag.onload = whenLoaded;
             styleTag.onreadystatechange = whenLoaded;
+            styleTag.onerror = () => {
+                reject(styleSrc);
+            };
             styleTag.rel = "stylesheet";
             styleTag.href = styleSrc;
             document.head.append(styleTag);
@@ -134,6 +136,9 @@ window.levels = {};
             };
             scriptTag.onload = whenLoaded;
             scriptTag.onreadystatechange = whenLoaded;
+            scriptTag.onerror = () => {
+                reject(scriptSrc);
+            };
             scriptTag.src = scriptSrc;
             document.body.append(scriptTag);
         });
@@ -147,7 +152,11 @@ window.levels = {};
                     if(this.status == 200) {
                         let level = new Level(this.responseXML);
                         window.levels[level.name] = level;
-                        resolve(level);
+                        level._initController().then(() => {
+                            resolve(level);
+                        }, (error) => {
+                            reject(error);
+                        });
                     } else {
                         reject(this.status);
                     }
@@ -187,6 +196,20 @@ window.levels = {};
         let progressBar = new ProgressBar();
         progressBar.setProgress(0);
         
+        function onError(res, error) {
+            let errorMsg = `Failed to load ${res}, please reload and try again.`;
+            console.error(`Could not load all ${res}:`);
+            console.error(error);
+            progressBar.bar.style.backgroundColor = "#ff4a4a";
+            // give the UI some time to render
+            progressBar.bar.ontransitionend = () => {
+                alert(errorMsg);
+            };
+            let posTxt = document.getElementById("pos");
+            posTxt.innerHTML = errorMsg;
+            posTxt.classList.add("levelLoadingFail");
+        }
+        
         // Load stylesheets
         // These can safely be done in parallel
         let stylesheetsDone = 0;
@@ -202,26 +225,22 @@ window.levels = {};
             let afterScriptLoaded = () => {
                 progressBar.setProgress(++scriptsDone / (requiredScripts.length + 1) * 0.3 + 0.2);
                 if(scriptsDone < requiredScripts.length) {
-                    loadScript(requiredScripts[scriptsDone]).then(afterScriptLoaded);
+                    loadScript(requiredScripts[scriptsDone]).then(afterScriptLoaded, (error) => {
+                        onError("scripts", error);
+                    });
                 } else {
                     waitForYoutubeAPI(() => {
                         progressBar.setProgress(++scriptsDone / (requiredScripts.length + 1) * 0.3 + 0.2);
                         console.log("Loaded all scripts!");
                         
+                        // This prevents redefining loadScript
+                        Level.prototype.loadScript = loadScript;
+                        
                         // Load levels
-                        // this is the only operation that can fail, as far as we can tell.
                         let levelsDone = 0;
                         Promise.all(requiredLevels.map(s => loadLevel(s).then(p => {
                             progressBar.setProgress(++levelsDone / (requiredLevels.length) * 0.5 + 0.5);
-                        }))).catch((error) => {
-                            console.error("Could not load all levels:");
-                            console.error(error);
-                            progressBar.bar.style.backgroundColor = "#ff4a4a";
-                            // give the UI some time to render
-                            progressBar.bar.ontransitionend = () => {
-                                alert(levelLoadingError);
-                            };
-                        }).then(() => {
+                        }))).then(() => {
                             if(levelsDone == requiredLevels.length) {
                                 console.log("Loaded all levels!");
                                 
@@ -245,16 +264,16 @@ window.levels = {};
                                 
                                 // main function defined in index.js
                                 main();
-                            } else {
-                                let posTxt = document.getElementById("pos");
-                                posTxt.innerHTML = levelLoadingError;
-                                posTxt.classList.add("levelLoadingFail");
                             }
+                        }, (error) => {
+                            onError("levels", error);
                         });
                     });
                 }
             };
             afterScriptLoaded();
+        }, (error) => {
+            onError("stylesheets", error);
         });
     }
     
