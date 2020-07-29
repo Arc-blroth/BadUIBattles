@@ -6,6 +6,7 @@
 // If you're looking for the main code, see
 //                index.js
 
+
 // youtube script loading - these are defined
 // on window so they can be yeeted later
 window.isYoutubeAPILoaded = false;
@@ -42,6 +43,8 @@ window.levels = {};
     const requiredLevels = [
         "/mapdata/testing-room.xml"
     ];
+    
+    const levelLoadingError = "Failed to load level data, please reload and try again.";
     
     function buildElement(type, classList = []) {
         let ele = document.createElement(type);
@@ -216,31 +219,37 @@ window.levels = {};
                             progressBar.bar.style.backgroundColor = "#ff4a4a";
                             // give the UI some time to render
                             progressBar.bar.ontransitionend = () => {
-                                alert("Failed to load level data, please reload and try again.");
+                                alert(levelLoadingError);
                             };
                         }).then(() => {
-                            console.log("Loaded all levels!");
-                            
-                            delete window.onYouTubeIframeAPIReady;
-                            delete window.isYoutubeAPILoaded;
-                            
-                            // give the UI some time to render
-                            progressBar.track.ontransitionend = () => {
-                                logoCanvas.style.opacity = "0%";
-                                loadScreenBg.style.opacity = "0%";
-                                progressBar.track.style.opacity = "0%";
-                                setTimeout(() => {
-                                    window.onresize = () => {};
-                                    logoCanvas.parentElement.removeChild(logoCanvas);
-                                    progressBar.remove();
-                                    loadScreenBg.parentElement.removeChild(loadScreenBg);
-                                    document.body.requestPointerLock();
-                                }, 1000);
-                                progressBar.track.ontransitionend = () => {};
+                            if(levelsDone == requiredLevels.length) {
+                                console.log("Loaded all levels!");
+                                
+                                delete window.onYouTubeIframeAPIReady;
+                                delete window.isYoutubeAPILoaded;
+                                
+                                // give the UI some time to render
+                                progressBar.track.ontransitionend = () => {
+                                    logoCanvas.style.opacity = "0%";
+                                    loadScreenBg.style.opacity = "0%";
+                                    progressBar.track.style.opacity = "0%";
+                                    setTimeout(() => {
+                                        window.onresize = () => {};
+                                        logoCanvas.parentElement.removeChild(logoCanvas);
+                                        progressBar.remove();
+                                        loadScreenBg.parentElement.removeChild(loadScreenBg);
+                                        document.body.requestPointerLock();
+                                    }, 1000);
+                                    progressBar.track.ontransitionend = () => {};
+                                }
+                                
+                                // main function defined in index.js
+                                main();
+                            } else {
+                                let posTxt = document.getElementById("pos");
+                                posTxt.innerHTML = levelLoadingError;
+                                posTxt.classList.add("levelLoadingFail");
                             }
-                            
-                            // main function defined in index.js
-                            main();
                         });
                     });
                 }

@@ -52,3 +52,9 @@ body {
     height: 100%;
     background-color: #17c1ff;
 }
+
+.levelLoadingFail {
+    z-index: 1001 !important;
+    color: white !important;
+    background-color: #ff4a4a99 !important;
+}

@@ -22,10 +22,13 @@ class Level {
         
         // if you're wondering why there's so many Number()'s
         // its because javascript is stupid.
-        let playerX  = Number(rootTag.getAttribute("playerX") || 0);
-        let playerY  = Number(rootTag.getAttribute("playerY") || 0);
-        let playerZ  = Number(rootTag.getAttribute("playerZ") || 0);
-        engine.playerBody.position.set(playerX, playerY, playerZ);
+        let playerX     = Number(rootTag.getAttribute("playerX")     || 0);
+        let playerY     = Number(rootTag.getAttribute("playerY")     || 0);
+        let playerZ     = Number(rootTag.getAttribute("playerZ")     || 0);
+        let playerYaw   = Number(rootTag.getAttribute("playerYaw")   || -0.5);
+        let playerPitch = Number(rootTag.getAttribute("playerPitch") || 0);
+        engine.camera.yaw = playerYaw * Math.PI;
+        engine.camera.pitch = playerPitch * Math.PI;
         
         for(let i = 0; i < rootTag.children.length; i++) {
             let bodyTag = rootTag.children[i];
