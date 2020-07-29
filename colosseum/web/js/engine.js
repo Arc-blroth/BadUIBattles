@@ -100,6 +100,9 @@ class Engine {
     
     tick(currentTime) {
         let dt = (currentTime - this.lastTickTime) / 1000;
+        
+        this.playerBody.quaternion.setFromEuler(0, this.camera.pitch, 0, "XYZ");
+        
         this.world.step(fixedTimeStep, dt, maxSubSteps);
         
         this.playerBody.velocity.x *= 0.93;
