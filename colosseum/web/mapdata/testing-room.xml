@@ -1,0 +1,12 @@
+<level name="testing-room" playerX="0" playerY="-2000" playerZ="0">
+    <boxBody width="10000" height="1000" depth="10000" mass="0" fixed="false">
+    </boxBody>
+    <uiBody width="1000" height="1000" posX="0" posY="-1500" posZ="-1000">
+        <div class="test1" />
+    </uiBody>
+    <uiBody type="youtube" videoId="dQw4w9WgXcQ" width="1000" height="1000" posX="-1500" posY="-1500" posZ="-500" rotY="45">
+    </uiBody>
+    <uiBody width="1000" height="1000" posX="-2000" posY="-1500" posZ="1000" rotY="90">
+        <div class="test1" />
+    </uiBody>
+</level>

@@ -13,6 +13,9 @@ window.onYouTubeIframeAPIReady = () => {
     isYoutubeAPILoaded = true;
 }
 
+// level data persists beyond load screen
+window.levels = {};
+
 (function() {
     
     // Run-length encoded logo, 99x18
@@ -32,7 +35,12 @@ window.onYouTubeIframeAPIReady = () => {
         "/js/cannon.min.js",
         "/js/util.js",
         "/js/engine.js",
+        "/js/level.js",
         "/js/index.js"
+    ];
+    
+    const requiredLevels = [
+        "/mapdata/testing-room.xml"
     ];
     
     function buildElement(type, classList = []) {
@@ -128,6 +136,32 @@ window.onYouTubeIframeAPIReady = () => {
         });
     }
     
+    function loadLevel(levelSrc) {
+        return new Promise((resolve, reject) => {
+            let req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if(this.status == 200) {
+                        let level = new Level(this.responseXML);
+                        window.levels[level.name] = level;
+                        resolve(level);
+                    } else {
+                        reject(this.status);
+                    }
+                }
+            };
+            req.open("GET", levelSrc, true);
+            req.send();
+        });
+    }
+    
+    function htmlToElement(html) {
+        var template = document.createElement("template");
+        html = html.trim();
+        template.innerHTML = html;
+        return template.content.firstChild;
+    }
+    
     function waitForYoutubeAPI(onload) {
         if(isYoutubeAPILoaded) {
             onload();
@@ -146,7 +180,7 @@ window.onYouTubeIframeAPIReady = () => {
         redrawLogo(logoCanvas);
         window.onresize = () => { redrawLogo(logoCanvas); };
         
-        // 20% stylesheets | 80% scripts
+        // 20% stylesheets | 30% scripts | 50% levels
         let progressBar = new ProgressBar();
         progressBar.setProgress(0);
         
@@ -163,32 +197,51 @@ window.onYouTubeIframeAPIReady = () => {
             // we start from -1 because afterScriptLoaded is called once without loading anything
             let scriptsDone = -1;
             let afterScriptLoaded = () => {
-                progressBar.setProgress(++scriptsDone / (requiredScripts.length + 1) * 0.8 + 0.2);
+                progressBar.setProgress(++scriptsDone / (requiredScripts.length + 1) * 0.3 + 0.2);
                 if(scriptsDone < requiredScripts.length) {
                     loadScript(requiredScripts[scriptsDone]).then(afterScriptLoaded);
                 } else {
                     waitForYoutubeAPI(() => {
-                        progressBar.setProgress(++scriptsDone / (requiredScripts.length + 1) * 0.8 + 0.2);
+                        progressBar.setProgress(++scriptsDone / (requiredScripts.length + 1) * 0.3 + 0.2);
                         console.log("Loaded all scripts!");
                         
-                        delete window.onYouTubeIframeAPIReady;
-                        delete window.isYoutubeAPILoaded;
-                        
-                        progressBar.bar.ontransitionend = () => {
-                            logoCanvas.style.opacity = "0%";
-                            loadScreenBg.style.opacity = "0%";
-                            progressBar.track.style.opacity = "0%";
-                            setTimeout(() => {
-                                window.onresize = () => {};
-                                logoCanvas.parentElement.removeChild(logoCanvas);
-                                progressBar.remove();
-                                loadScreenBg.parentElement.removeChild(loadScreenBg);
-                                document.body.requestPointerLock();
-                            }, 1000);
-                        }
-                        
-                        // main function defined in index.js
-                        main();
+                        // Load levels
+                        // this is the only operation that can fail, as far as we can tell.
+                        let levelsDone = 0;
+                        Promise.all(requiredLevels.map(s => loadLevel(s).then(p => {
+                            progressBar.setProgress(++levelsDone / (requiredLevels.length) * 0.5 + 0.5);
+                        }))).catch((error) => {
+                            console.error("Could not load all levels:");
+                            console.error(error);
+                            progressBar.bar.style.backgroundColor = "#ff4a4a";
+                            // give the UI some time to render
+                            progressBar.bar.ontransitionend = () => {
+                                alert("Failed to load level data, please reload and try again.");
+                            };
+                        }).then(() => {
+                            console.log("Loaded all levels!");
+                            
+                            delete window.onYouTubeIframeAPIReady;
+                            delete window.isYoutubeAPILoaded;
+                            
+                            // give the UI some time to render
+                            progressBar.track.ontransitionend = () => {
+                                logoCanvas.style.opacity = "0%";
+                                loadScreenBg.style.opacity = "0%";
+                                progressBar.track.style.opacity = "0%";
+                                setTimeout(() => {
+                                    window.onresize = () => {};
+                                    logoCanvas.parentElement.removeChild(logoCanvas);
+                                    progressBar.remove();
+                                    loadScreenBg.parentElement.removeChild(loadScreenBg);
+                                    document.body.requestPointerLock();
+                                }, 1000);
+                                progressBar.track.ontransitionend = () => {};
+                            }
+                            
+                            // main function defined in index.js
+                            main();
+                        });
                     });
                 }
             };

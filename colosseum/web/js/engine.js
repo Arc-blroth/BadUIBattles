@@ -53,9 +53,17 @@ class Engine {
         
         this.camera = new Camera(this.playerBody);
         
+        this.bodies = {};
         this.uiBodies = {};
         
         this.lastTickTime = performance.now();
+    }
+    
+    addBody(body) {
+        this.bodies[body.id] = body;
+        body.material = this.groundMaterial;
+        body.linearDamping = 0.2;
+        this.world.addBody(body);
     }
     
     addUIBody(body) {
@@ -63,6 +71,22 @@ class Engine {
         body.body.material = this.groundMaterial;
         body.body.linearDamping = 0.2;
         this.world.addBody(body.body);
+    }
+    
+    clearBodies() {
+        this.bodies = {};
+        this.uiBodies = {};
+        while(this.world.bodies.length > 0) {
+            this.world.removeBody(this.world.bodies[0]);
+        }
+        this.world.addBody(this.playerBody);
+        this.isPlayerMoving = false;
+        this.isPlayerOnGround = true;
+    }
+    
+    loadLevel(levelName) {
+        this.clearBodies();
+        window.levels[levelName].load(this);
     }
     
     acceleratePlayer(glVelocity) {
@@ -207,6 +231,8 @@ class UIBody {
         this.containerElement.classList.add("uibody-container");
         document.body.append(this.containerElement);
         this.containerElement.append(this.domElement);
+        // document fragments break if we don't re-fetch the domElement
+        this.domElement = this.containerElement.firstChild;
         
         this.width = width || this.domElement.offsetWidth || 100;
         this.height = height || this.domElement.offsetHeight || 100;

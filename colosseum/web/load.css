@@ -35,7 +35,7 @@ body {
 
 .progressBar {
     width: 70%;
-    height: 25px;
+    height: min(25px, 5%);
     left: 50%;
     top: 70%;
     transform: translate(-50%, -50%);
