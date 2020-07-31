@@ -1,7 +1,7 @@
 <level name="prologue" playerX="0" playerY="-2000" playerZ="0" bgColor="#0a0e12" controller="/js/levels/prologue.js">
     <boxBody width="10000" height="1000" depth="10000" mass="0" fixed="false">
     </boxBody>
-    <uiBody width="1440" height="1080" posX="0" posY="-1250" posZ="-1000">
+    <uiBody width="1440" height="1080" posX="0" posY="-1150" posZ="-750">
         <div id="prologue-monitor" class="prologue-monitor">
             <img src="/assets/xfce/xfce-stripes.png" class="xfce-bg" />
             <div style="left: 8%; top: 8%;" class="xfce-window" id="window-terminal">

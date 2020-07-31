@@ -7,6 +7,7 @@ const skyGradientStops = [0, 50, 64];
 const viewBobDuration = 100;
 const viewBobIntensity = 20;
 const reach = 1200;
+const dialogAnimationSpeed = 1;
 
 class Engine {
     
@@ -36,7 +37,8 @@ class Engine {
         this.playerBody.linearDamping = 0.4;
         this.playerBody.addShape(this.playerShape);
         this.world.addBody(this.playerBody);
-        this.allowPlayerControl = true;
+        this.allowPlayerMovement = true;
+        this.allowCameraMovement = true;
         this.isPlayerMoving = false;
         this.isPlayerOnGround = true;
         
@@ -59,6 +61,17 @@ class Engine {
         
         this.level = null;
         this.controller = null;
+        
+        this.dialogBoxTitle = document.createElement("div");
+        this.dialogBoxTitle.classList.add("ui", "dialog-box", "dialog-box-title");
+        document.body.append(this.dialogBoxTitle);
+        this.dialogBoxContent = document.createElement("div");
+        this.dialogBoxContent.classList.add("ui", "dialog-box", "dialog-box-content");
+        document.body.append(this.dialogBoxContent);
+        this.dialogTextForAnimation = "";
+        this.dialogAnimationProgress = 0;
+        this.dialogSpamCooldown = 0;
+        
         this.currentTick = -1;
         this.lastTickTime = performance.now();
     }
@@ -131,6 +144,11 @@ class Engine {
             uiBody.updateTransform(this.camera);
         });
         
+        if(this.dialogSpamCooldown > 0) this.dialogSpamCooldown -= dialogAnimationSpeed;
+        if(this.dialogAnimationProgress < this.dialogTextForAnimation.length) {
+            this._animateDialog();
+        }
+        
         this.lastTickTime = currentTime;
     }
     
@@ -169,6 +187,47 @@ class Engine {
     
     setSkyColor(colorOrR, g, b) {
         document.body.backgroundColor = b === undefined ? colorOrR : `rgb(${colorOrR},${g},${b})`;
+    }
+    
+    showDialog() {
+        this.dialogBoxTitle.style.transform = "translateY(0px)";
+        this.dialogBoxContent.style.transform = "translateY(0px)";
+    }
+    
+    hideDialog() {
+        this.dialogBoxTitle.style.transform = "translateY(30vh)";
+        this.dialogBoxContent.style.transform = "translateY(30vh)";
+    }
+    
+    setDialogTitle(title) {
+        this.dialogBoxTitle.innerHTML = title;
+    }
+    
+    setDialogText(text) {
+        this.dialogBoxContent.innerHTML = "";
+        this.dialogTextForAnimation = text;
+        this.dialogAnimationProgress = 0;
+    }
+    
+    onDialogAdvance() {
+        if(this.dialogAnimationProgress >= this.dialogTextForAnimation.length) {
+            if(this.dialogAnimationProgress >= this.dialogTextForAnimation.length + this.dialogSpamCooldown) {
+                if(this.controller) {
+                    this.controller.onDialogAdvance();
+                }
+            }
+        } else {
+            this._animateDialog();
+            if(this.dialogAnimationProgress >= this.dialogTextForAnimation.length - 1) {
+                this.dialogSpamCooldown = 30 * dialogAnimationSpeed;
+            }
+        }
+    }
+    
+    _animateDialog() {
+        this.dialogAnimationProgress += dialogAnimationSpeed;
+        this.dialogBoxContent.innerHTML =  this.dialogTextForAnimation
+            .substring(0, Math.round(this.dialogAnimationProgress)).replace(/\n/g, "<br>");
     }
     
 }

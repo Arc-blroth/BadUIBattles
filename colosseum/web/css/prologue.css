@@ -10,7 +10,6 @@
     object-fit: cover;
     width: 100%;
     height: 100%;
-
 }
 
 .prologue-monitor > .xfce-window {
@@ -108,7 +107,7 @@
 .prologue-monitor > .cursor {
     position: absolute;
     width: 40px;
-    transition: transform 200ms ease;
+    transition: transform 250ms ease;
 }
 
 .prologue-monitor > .xfce-bottom-panel {

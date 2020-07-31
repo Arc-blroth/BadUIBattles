@@ -111,8 +111,50 @@ class LevelController {
         
     }
     
-    tick(currentTime) {
+    tick(currentTime, currentTick) {
         
+    }
+    
+    onDialogAdvance() {
+        
+    }
+    
+}
+
+class DialogHelper {
+    
+    constructor(engine, messages) {
+        this.engine = engine;
+        this.messages = messages;
+        this.dialogPosition = -1;
+    }
+    
+    startDialog() {
+        this.onDialogAdvance();
+        this.engine.showDialog();
+    }
+    
+    onDialogAdvance() {
+        this.dialogPosition++;
+        if(this.dialogPosition < this.messages.length) {
+            let message = this.messages[this.dialogPosition];
+            if(typeof(message) === 'string') {
+                this.engine.setDialogText(message);
+            } else {
+                if(message.length > 1) {
+                    this.engine.setDialogTitle(message[0]);
+                    this.engine.setDialogText(message[1]);
+                } else {
+                    this.engine.setDialogText(message[0]);
+                }
+            }
+        } else {
+            this.engine.hideDialog();
+        }
+    }
+    
+    isDone() {
+        return this.dialogPosition == this.messages.length + 1;
     }
     
 }

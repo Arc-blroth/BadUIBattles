@@ -26,7 +26,7 @@ function animate(currentTime) {
     
     engine.camera.updateVectors();
     if(document.hasFocus()) {
-        if(engine.allowPlayerControl) {
+        if(engine.allowPlayerMovement) {
             if(keysPressed[87] == true) {
                 engine.acceleratePlayer(engine.camera.getMoveXVec(walkSpeed));
             }
@@ -43,6 +43,9 @@ function animate(currentTime) {
                 engine.acceleratePlayer(engine.camera.getMoveYVec(-walkSpeed * jumpMulti));
                 engine.isPlayerOnGround = false;
             }
+        }
+        if(keysPressed[69] == true) {
+            engine.onDialogAdvance();
         }
         //if(keysPressed[16] == true) {
         //    engine.camera.moveY(walkSpeed);
@@ -76,7 +79,7 @@ document.onclick = () => {
 document.onmousemove = (e) => {
     if(document.pointerLockElement === document.body || document.mozPointerLockElement === document.body) {
         if(e.movementX) {
-             if(engine.allowPlayerControl) {
+             if(engine.allowCameraMovement) {
                 engine.camera.yaw += mouseSensitivity * e.movementX;
                 let pitch = engine.camera.pitch + mouseSensitivity * e.movementY;
                 if(pitch >  Math.PI / 2) pitch =  Math.PI / 2;
