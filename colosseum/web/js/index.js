@@ -26,21 +26,23 @@ function animate(currentTime) {
     
     engine.camera.updateVectors();
     if(document.hasFocus()) {
-        if(keysPressed[87] == true) {
-            engine.acceleratePlayer(engine.camera.getMoveXVec(walkSpeed));
-        }
-        if(keysPressed[83] == true) {
-            engine.acceleratePlayer(engine.camera.getMoveXVec(-walkSpeed));
-        }
-        if(keysPressed[68] == true) {
-            engine.acceleratePlayer(engine.camera.getMoveZVec(walkSpeed));
-        }
-        if(keysPressed[65] == true) {
-            engine.acceleratePlayer(engine.camera.getMoveZVec(-walkSpeed));
-        }
-        if(keysPressed[32] == true && engine.isPlayerOnGround) {
-            engine.acceleratePlayer(engine.camera.getMoveYVec(-walkSpeed * jumpMulti));
-            engine.isPlayerOnGround = false;
+        if(engine.allowPlayerControl) {
+            if(keysPressed[87] == true) {
+                engine.acceleratePlayer(engine.camera.getMoveXVec(walkSpeed));
+            }
+            if(keysPressed[83] == true) {
+                engine.acceleratePlayer(engine.camera.getMoveXVec(-walkSpeed));
+            }
+            if(keysPressed[68] == true) {
+                engine.acceleratePlayer(engine.camera.getMoveZVec(walkSpeed));
+            }
+            if(keysPressed[65] == true) {
+                engine.acceleratePlayer(engine.camera.getMoveZVec(-walkSpeed));
+            }
+            if(keysPressed[32] == true && engine.isPlayerOnGround) {
+                engine.acceleratePlayer(engine.camera.getMoveYVec(-walkSpeed * jumpMulti));
+                engine.isPlayerOnGround = false;
+            }
         }
         //if(keysPressed[16] == true) {
         //    engine.camera.moveY(walkSpeed);
@@ -74,12 +76,14 @@ document.onclick = () => {
 document.onmousemove = (e) => {
     if(document.pointerLockElement === document.body || document.mozPointerLockElement === document.body) {
         if(e.movementX) {
-            engine.camera.yaw += mouseSensitivity * e.movementX;
-            let pitch = engine.camera.pitch + mouseSensitivity * e.movementY;
-            if(pitch >  Math.PI / 2) pitch =  Math.PI / 2;
-            if(pitch < -Math.PI / 2) pitch = -Math.PI / 2;
-            engine.camera.pitch = pitch;
-            engine.camera.updateVectors();
+             if(engine.allowPlayerControl) {
+                engine.camera.yaw += mouseSensitivity * e.movementX;
+                let pitch = engine.camera.pitch + mouseSensitivity * e.movementY;
+                if(pitch >  Math.PI / 2) pitch =  Math.PI / 2;
+                if(pitch < -Math.PI / 2) pitch = -Math.PI / 2;
+                engine.camera.pitch = pitch;
+                engine.camera.updateVectors();
+             }
         }
     }
 }

@@ -1,0 +1,171 @@
+.prologue-monitor {
+    position: relative;
+    overflow: hidden;
+    padding: 10px 10px;
+    background: black;
+}
+
+.prologue-monitor > .xfce-bg {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+
+}
+
+.prologue-monitor > .xfce-window {
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    color: #9b9b9b;
+    background-color: #f6f5f4;
+    box-shadow: 4px 4px 15px 2px rgba(0,0,0,0.6);
+    border: 8px #f6f5f4 solid;
+    border-radius: 8px;
+    overflow: visible;
+}
+
+.prologue-monitor > .xfce-window-selected {
+    color: black;
+}
+
+.prologue-monitor > .xfce-window-selected > .xfce-window-selected-titlebar {
+    position: absolute;
+    width: calc(100% + 16px);
+    height: calc(5% + 16px);
+    background-color: #d8d5d2;
+    border: 8px #d8d5d2 solid;
+    border-bottom: none;
+    border-radius: 8px 8px 0px 0px;
+    transform: translate(-8px, -8px);
+}
+
+.prologue-monitor > .xfce-window > img {
+    position: absolute;
+    height: 5%;
+}
+
+.prologue-monitor > .xfce-window > .titlebar {
+    position: relative;
+    text-align: center;
+    height: 5%;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 14px;
+    margin-bottom: 0.8em;
+}
+
+.prologue-monitor > .xfce-window > .titlemenu {
+    position: relative;
+    height: 5%;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 14px;
+    margin-bottom: 0.2em;
+}
+
+.prologue-monitor > .xfce-window > .emulator {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: calc(100% - 4em);
+    text-align: left;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 14px;
+    background-color: black;
+}
+
+.prologue-monitor > .xfce-window > .terminal {
+    color: white;
+    background-color: black;
+    resize: none;
+}
+
+.prologue-monitor > .xfce-window > .titlemenu > .titlesearchbar {
+    display: inline-block;
+    position: relative;
+    height: 100%;
+    width: 82%;
+    background-color: unset;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 14px;
+    vertical-align: middle;
+    line-height: 90%;
+    resize: none;
+}
+
+.prologue-monitor > .xfce-window > .titlemenu > .right {
+    display: inline-block;
+    position: absolute;
+    right: 0.2em;
+}
+
+.prologue-monitor > .xfce-window > .browser {
+    color: black;
+    background-color: white;
+    overflow: scroll;
+    border: none;
+}
+
+.prologue-monitor > .cursor {
+    position: absolute;
+    width: 40px;
+    transition: transform 200ms ease;
+}
+
+.prologue-monitor > .xfce-bottom-panel {
+    position: absolute;
+    top: 95%;
+    width: 100%;
+    height: 5%;
+    background-color: #f6f5f4;
+    border-top: 1px #b2aca6 solid;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 20px;
+}
+
+.prologue-monitor > .xfce-bottom-panel > .xfce-spacer {
+    position: relative;
+    display: inline-block;
+    height: 100%;
+    left: 0.5em;
+    transform: translateY(-1em);
+}
+
+.prologue-monitor > .xfce-bottom-panel > .xfce-spacer-2 {
+    margin-right: 0.5em;
+}
+
+.prologue-monitor > .xfce-bottom-panel > .xfce-app-toolbar {
+    position: relative;
+    display: inline-block;
+    width: 25%;
+    height: 100%;
+    border: 3px solid #cDc7c2;
+    border-radius: 5px;
+    padding: calc(0.5em - 2px) 0 0.5em 0.2em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.prologue-monitor > .xfce-bottom-panel > .xfce-app-toolbar > img {
+    height: 100%;
+}
+
+.prologue-monitor > .xfce-bottom-panel > .selected {
+    background-color: #d6d1cd;
+}
+
+.prologue-monitor > .xfce-bottom-panel > p {
+    position: absolute;
+    display: inline-block;
+    top: 0.5em;
+    transform: translateX(-50%);
+}
+
+.prologue-monitor > .xfce-bottom-panel > .xfce-clock {
+    right: 1.75em;
+}
+
+.prologue-monitor > .xfce-bottom-panel > .xfce-actions {
+    right: 0.5em;
+}

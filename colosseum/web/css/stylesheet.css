@@ -1,4 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Hind&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Hind&family=Source+Code+Pro:wght@600&display=swap');
+@import "/css/prologue.css";
 
 .center {
 	text-align: center;
@@ -11,11 +12,6 @@
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
-}
-
-.debug-text {
-	font-family: 'Consolas', monospace;
-    background-color: #cccccc99;
 }
 
 .uibody-container {

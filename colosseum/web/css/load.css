@@ -14,6 +14,11 @@ body {
     z-index: 1000;
 }
 
+.debug-text {
+	font-family: 'Source Code Pro', 'Consolas', monospace;
+    background-color: #cccccc99;
+}
+
 .loadScreenBg {
     width: 100vw;
     height: 100vh;

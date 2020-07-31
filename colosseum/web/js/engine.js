@@ -36,6 +36,7 @@ class Engine {
         this.playerBody.linearDamping = 0.4;
         this.playerBody.addShape(this.playerShape);
         this.world.addBody(this.playerBody);
+        this.allowPlayerControl = true;
         this.isPlayerMoving = false;
         this.isPlayerOnGround = true;
         
@@ -58,6 +59,7 @@ class Engine {
         
         this.level = null;
         this.controller = null;
+        this.currentTick = -1;
         this.lastTickTime = performance.now();
     }
     
@@ -91,6 +93,9 @@ class Engine {
         this.level = window.levels[levelName];
         if(this.level) {
             this.controller = this.level.load(this);
+            if(this.controller) {
+                this.controller.init();
+            }
         } else {
             this.controller = null;
         }
@@ -107,10 +112,11 @@ class Engine {
     
     tick(currentTime) {
         let dt = (currentTime - this.lastTickTime) / 1000;
+        this.currentTick++;
         
         this.playerBody.quaternion.setFromEuler(0, this.camera.pitch, 0, "XYZ");
         if(this.controller) {
-            this.controller.tick(currentTime);
+            this.controller.tick(currentTime, this.currentTick);
         }
         
         this.world.step(fixedTimeStep, dt, maxSubSteps);

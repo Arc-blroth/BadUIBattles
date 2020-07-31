@@ -1,12 +1,49 @@
 <level name="prologue" playerX="0" playerY="-2000" playerZ="0" bgColor="#0a0e12" controller="/js/levels/prologue.js">
     <boxBody width="10000" height="1000" depth="10000" mass="0" fixed="false">
     </boxBody>
-    <uiBody width="1000" height="1000" posX="0" posY="-1500" posZ="-1000">
-        <div class="test1" />
-    </uiBody>
-    <uiBody type="youtube" videoId="dQw4w9WgXcQ" width="1000" height="1000" posX="-1500" posY="-1500" posZ="-500" rotY="45">
-    </uiBody>
-    <uiBody width="1000" height="1000" posX="-2000" posY="-1500" posZ="1000" rotY="90">
-        <div class="test1" />
+    <uiBody width="1440" height="1080" posX="0" posY="-1250" posZ="-1000">
+        <div id="prologue-monitor" class="prologue-monitor">
+            <img src="/assets/xfce/xfce-stripes.png" class="xfce-bg" />
+            <div style="left: 8%; top: 8%;" class="xfce-window" id="window-terminal">
+                <!-- Somehow putting a single space in these divs fixes things -->
+                <div class="xfce-window-selected-titlebar"> </div>
+                <img style="transform: translateY(-0.15em);" src="/assets/gnome/utilities-terminal.png"></img>
+                <img style="left: 100%; transform: translateX(-300%);" src="/assets/gnome/window-minimize-symbolic.svg"></img>
+                <img style="left: 100%; transform: translateX(-200%);" src="/assets/gnome/window-maximize-symbolic.svg"></img>
+                <img style="left: 100%; transform: translateX(-100%);" src="/assets/gnome/window-close-symbolic.svg"></img>
+                <p class="titlebar">Terminal - arc@blroth:~/cheeseburger/</p>
+                <p class="titlemenu">File Edit View Terminal Tabs Help</p>
+                <textarea class="emulator terminal">[arc@blroth ~/cheeseburger/]$ </textarea>
+            </div>
+            <div style="left: 53%; top: 27%;" class="xfce-window xfce-window-selected" id="window-interwebz">
+                <div class="xfce-window-selected-titlebar"> </div>
+                <img style="transform: translateY(-0.09em);" src="/assets/generic-browser.png"></img>
+                <img style="left: 100%; transform: translateX(-300%);" src="/assets/gnome/window-minimize-symbolic.svg"></img>
+                <img style="left: 100%; transform: translateX(-200%);" src="/assets/gnome/window-maximize-symbolic.svg"></img>
+                <img style="left: 100%; transform: translateX(-100%);" src="/assets/gnome/window-close-symbolic.svg"></img>
+                <p class="titlebar">Company Interwebz Broser - Generic Cheeseburger Co.</p>
+                <p class="titlemenu">
+                    &#x21E8; &#x21E6; &#x21BA; &#8962;
+                    <textarea class="titlesearchbar">localhost:8080/cheeseburger.html</textarea>
+                    <span class="right">&#x2630;</span>
+                </p>
+                <iframe class="emulator browser"> </iframe>
+            </div>
+            <div class="xfce-bottom-panel">
+                <div class="xfce-spacer">&#x1F401;</div>
+                <div class="xfce-spacer xfce-spacer-2">&#8801;</div>
+                <div class="xfce-app-toolbar" id="toolbar-interwebz">
+                    <img style="transform: translateY(-0.09em);" src="/assets/generic-browser.png"></img>
+                    Company Interwebz Broser - Generic Cheeseburger Co.
+                </div>
+                <div class="xfce-app-toolbar selected" id="toolbar-terminal">
+                    <img style="transform: translateY(-0.15em);" src="/assets/gnome/utilities-terminal.png"></img>
+                    Terminal - arc@blroth:~/cheeseburger/
+                </div>
+                <p class="xfce-clock" id="xfce-clock">1:20 AM</p>
+                <p class="xfce-actions">arc</p>
+            </div>
+            <img class="cursor" id="cursor" src="/assets/gnome/left_ptr.png"/>
+        </div>
     </uiBody>
 </level>

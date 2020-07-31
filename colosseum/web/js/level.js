@@ -107,6 +107,10 @@ class LevelController {
         this.level = level;
     }
     
+    init() {
+        
+    }
+    
     tick(currentTime) {
         
     }
