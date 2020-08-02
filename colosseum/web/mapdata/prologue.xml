@@ -13,7 +13,7 @@
                 <img style="left: 100%; transform: translateX(-100%);" src="/assets/gnome/window-close-symbolic.svg"></img>
                 <p class="titlebar">Terminal - arc@blroth:~/cheeseburger/</p>
                 <p class="titlemenu">File Edit View Terminal Tabs Help</p>
-                <textarea class="emulator terminal">[arc@blroth ~/cheeseburger/]$ </textarea>
+                <p class="emulator terminal" id="emulator"> </p>
             </div>
             <div style="left: 53%; top: 27%;" class="xfce-window xfce-window-selected" id="window-interwebz">
                 <div class="xfce-window-selected-titlebar"> </div>
@@ -27,7 +27,9 @@
                     <textarea class="titlesearchbar">localhost:8080/cheeseburger.html</textarea>
                     <span class="right">&#x2630;</span>
                 </p>
-                <iframe class="emulator browser"> </iframe>
+                <div class="emulator browser">
+                    <iframe class="browser-internal" id="interwebz-frame" src="about:blank"> </iframe>
+                </div>
             </div>
             <div class="xfce-bottom-panel">
                 <div class="xfce-spacer">&#x1F401;</div>

@@ -1,0 +1,49 @@
+.hljs {
+  display: block;
+  color: white;
+}
+
+.hljs-name,
+.hljs-strong {
+  font-weight: bold;
+}
+
+.hljs-code,
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-tag {
+  color: cornflowerblue;
+}
+
+.hljs-tag .hljs-name {
+  color: chocolate;
+}
+
+.hljs-attr {
+  color: limegreen;
+}
+
+.hljs-string,
+.hljs-bullet {
+  color: red;
+}
+
+.hljs-type,
+.hljs-title,
+.hljs-section,
+.hljs-attribute,
+.hljs-quote,
+.hljs-built_in,
+.hljs-builtin-name {
+  color: #ffa;
+}
+
+.hljs-meta {
+  color: royalblue;
+}
+
+.hljs a {
+  color: inherit;
+}

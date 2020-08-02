@@ -1,3 +1,5 @@
+@import url("/css/prologue-highlighting.css");
+
 .prologue-monitor {
     position: relative;
     overflow: hidden;
@@ -76,6 +78,14 @@
     color: white;
     background-color: black;
     resize: none;
+    overflow: hidden;
+    overflow-wrap: break-word;
+}
+
+.prologue-monitor > .xfce-window > .terminal > pre {
+    color: white;
+    font-size: 100%;
+    margin: 0px;
 }
 
 .prologue-monitor > .xfce-window > .titlemenu > .titlesearchbar {
@@ -100,8 +110,15 @@
 .prologue-monitor > .xfce-window > .browser {
     color: black;
     background-color: white;
+}
+
+.prologue-monitor > .xfce-window > .browser > .browser-internal {
+    width: 200%;
+    height: 200%;
     overflow: scroll;
     border: none;
+    transform-origin: 0px 0px;
+    transform: scale(0.5);
 }
 
 .prologue-monitor > .cursor {

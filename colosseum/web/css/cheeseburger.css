@@ -1,0 +1,47 @@
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: 'Hind', sans-serif;
+	color: black;
+	display: flex;
+	flex-direction: column;
+}
+
+.cheeseburger-branding-bg {
+	background-color: #a88b3e;
+}
+
+.cheeseburger-hero {
+    display: block;
+    width: 100%;
+    background: url("https://images.unsplash.com/photo-1465799411029-5a317ff17837?auto=format&fit=crop&w=1350&q=80");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    text-align: center;
+}
+
+.cheeseburger-hero-inner {
+    margin-top: 10%;
+}
+
+.motto {
+    font-style: italic;
+    font-size: 2rem;
+}
+
+.cheeseburger-menu {
+    padding: 2rem 2rem;
+    background-color: #e9ecef;
+}
+
+.code {
+	font-family: 'Consolas', monospace;
+}
+
+.disclaimer {
+	font-size: 3vh;
+}

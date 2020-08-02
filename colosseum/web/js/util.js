@@ -26,3 +26,20 @@ CANNON.Vec3.fromGl = function(glVec3) {
 CANNON.Vec3.prototype.setFromGl = function(glVec3) {
     this.set(glVec3[0], glVec3[1], glVec3[2]);
 }
+
+function loadXML(file) {
+    return new Promise((resolve, reject) => {
+        let req = new XMLHttpRequest();
+        req.onreadystatechange = function() {
+            if (this.readyState == 4) {
+                if(this.status == 200) {
+                    resolve(this.responseText);
+                } else {
+                    reject(this.status);
+                }
+            }
+        };
+        req.open("GET", file, true);
+        req.send();
+    });
+}

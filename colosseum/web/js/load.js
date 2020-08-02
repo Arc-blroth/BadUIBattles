@@ -34,6 +34,7 @@ window.levels = {};
         "https://www.youtube.com/iframe_api",
         "/js/gl-matrix-min.js",
         "/js/cannon.min.js",
+        "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.2/build/highlight.min.js",
         "/js/util.js",
         "/js/engine.js",
         "/js/level.js",
