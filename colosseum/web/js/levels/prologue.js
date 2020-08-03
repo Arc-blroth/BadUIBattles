@@ -71,9 +71,13 @@ window.levels["prologue"].controllerClass = class extends LevelController {
             }
         }
         if(this.dialogHelper2.isDone() && this.finalFinalAnimationStarted) {
-            if(this.finalAnimationBlindness < 1) {
+            if(this.finalAnimationBlindness < 1.25) {
                 this.finalAnimationBlindness += 1/120;
-                    this.monitor.style.filter = `contrast(${1 - this.finalAnimationBlindness}) brightness(${1 + this.finalAnimationBlindness})`;
+                this.monitor.style.filter = `contrast(${1 - this.finalAnimationBlindness}) brightness(${1 + this.finalAnimationBlindness})`;
+                if(this.finalAnimationBlindness > 0.75) {
+                    let blindness = (this.finalAnimationBlindness - 0.75) * 2;
+                    document.body.style.backgroundColor = `rgb(${10 + (255 - 10) * blindness}, ${14 + (255 - 14) * blindness}, ${18 + (255 - 18) * blindness})`;
+                }
             } else {
                 engine.loadLevel("testing-room");
             }

@@ -91,6 +91,9 @@ class Engine {
     }
     
     clearBodies() {
+        Object.values(this.uiBodies).forEach(uiBody => {
+            uiBody.containerElement.parentElement.removeChild(uiBody.containerElement);
+        });
         this.bodies = {};
         this.uiBodies = {};
         while(this.world.bodies.length > 0) {
@@ -102,8 +105,14 @@ class Engine {
     }
     
     loadLevel(levelName) {
+        if(this.controller) {
+            this.controller.destroy();
+        }
         this.clearBodies();
+        document.body.style = "";
         this.level = window.levels[levelName];
+        this.allowPlayerMovement = true;
+        this.allowCameraMovement = true;
         if(this.level) {
             this.controller = this.level.load(this);
             if(this.controller) {

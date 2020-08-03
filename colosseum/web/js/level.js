@@ -119,6 +119,10 @@ class LevelController {
         
     }
     
+    destroy() {
+        
+    }
+    
 }
 
 class DialogHelper {
