@@ -1,5 +1,9 @@
 @import url("/css/prologue-highlighting.css");
 
+body {
+    transition: filter 500ms;
+}
+
 .prologue-monitor {
     position: relative;
     overflow: hidden;
@@ -88,6 +92,10 @@
     margin: 0px;
 }
 
+.prologue-monitor > .xfce-window > .terminal > span.bg-white {
+    background-color: white;
+}
+
 .prologue-monitor > .xfce-window > .titlemenu > .titlesearchbar {
     display: inline-block;
     position: relative;
@@ -124,7 +132,7 @@
 .prologue-monitor > .cursor {
     position: absolute;
     width: 40px;
-    transition: transform 250ms ease;
+    transition: transform 1250ms ease-in;
 }
 
 .prologue-monitor > .xfce-bottom-panel {

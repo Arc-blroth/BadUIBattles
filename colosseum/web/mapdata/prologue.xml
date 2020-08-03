@@ -22,8 +22,8 @@
                 <img style="left: 100%; transform: translateX(-200%);" src="/assets/gnome/window-maximize-symbolic.svg"></img>
                 <img style="left: 100%; transform: translateX(-100%);" src="/assets/gnome/window-close-symbolic.svg"></img>
                 <p class="titlebar">Company Interwebz Broser - Generic Cheeseburger Co.</p>
-                <p class="titlemenu">
-                    &#x21E8; &#x21E6; &#x21BA; &#8962;
+                <p class="titlemenu" id="interwebz-menu">
+                    &#x21E8; &#x21E6; <span id="reload">&#x21BA;</span> &#8962;
                     <textarea class="titlesearchbar">localhost:8080/cheeseburger.html</textarea>
                     <span class="right">&#x2630;</span>
                 </p>
