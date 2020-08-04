@@ -121,6 +121,7 @@ class Engine {
             this.controller.destroy();
         }
         this.clearBodies();
+        this.hideDialog();
         document.body.style = "";
         this.level = window.levels[levelName];
         this.allowPlayerMovement = true;

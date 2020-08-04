@@ -8,7 +8,7 @@ function main() { // called in load.js
 // ---------------------------------------- 
 engine = new Engine();
 const walkSpeed = 100;
-const jumpMulti = 18;
+const jumpMulti = 22;
 const mouseSensitivity = 0.01;
 let keysPressed = {};
 
@@ -16,7 +16,7 @@ let keysPressed = {};
 //                Content                  
 // ---------------------------------------- 
 
-engine.loadLevel("prologue");
+engine.loadLevel("captcha");
 
 // ----------------------------------------
 //             Event Handling              

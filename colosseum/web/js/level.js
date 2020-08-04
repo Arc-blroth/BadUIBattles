@@ -61,6 +61,8 @@ class Level {
         let playerZ     = Number(rootTag.getAttribute("playerZ")     || 0);
         let playerYaw   = Number(rootTag.getAttribute("playerYaw")   || -0.5);
         let playerPitch = Number(rootTag.getAttribute("playerPitch") || 0);
+        engine.playerBody.velocity.setZero();
+        engine.playerBody.position.set(playerX, playerY, playerZ);
         engine.camera.yaw = playerYaw * Math.PI;
         engine.camera.pitch = playerPitch * Math.PI;
         document.body.style.backgroundColor = bgColor;
@@ -109,11 +111,23 @@ class Level {
                 let depth = Number(bodyTag.getAttribute("depth") || 0);
                 let fixed = bodyTag.getAttribute("fixed");
                 if(fixed === null) fixed = false;
+                let type = bodyTag.getAttribute("type");
                 let shape = new CANNON.Box(new CANNON.Vec3(width, height, depth));
                 let body = new CANNON.Body({ mass: mass, fixedRotation: fixed });
                 body.addShape(shape);
                 body.position.set(posX, posY, posZ);
                 body.quaternion.setFromEuler(rotX, rotY, rotZ, "XYZ");
+                if(type == "death") {
+                    console.log(posY);
+                    body.addEventListener("collide", (e) => {
+                        console.log(e);
+                        if(e.contact.bj.id == body.id && e.contact.bi.id == engine.playerBody.id
+                        || e.contact.bi.id == body.id && e.contact.bj.id == engine.playerBody.id) {
+                            engine.playerBody.velocity.setZero();
+                            engine.playerBody.position.set(playerX, playerY, playerZ);
+                        }
+                    });
+                }
                 engine.addBody(body);
             } else {
                 console.warning("[Level] Unrecognized tag: " + bodyTag.tagName);
