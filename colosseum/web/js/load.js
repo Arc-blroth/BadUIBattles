@@ -43,7 +43,8 @@ window.levels = {};
     
     const requiredLevels = [
         "/mapdata/testing-room.xml",
-        "/mapdata/prologue.xml"
+        "/mapdata/prologue.xml",
+        "/mapdata/captcha.xml"
     ];
     
     function buildElement(type, classList = []) {
@@ -152,7 +153,7 @@ window.levels = {};
                 if (this.readyState == 4) {
                     if(this.status == 200) {
                         let level = new Level(this.responseXML);
-                        window.levels[level.name] = level;
+                        window.levels[level.id] = level;
                         level._initController().then(() => {
                             resolve(level);
                         }, (error) => {

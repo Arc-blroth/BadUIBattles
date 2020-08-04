@@ -14,7 +14,19 @@ class Level {
             throw "A level source file must contain exactly 1 top-level <level> tag."
         }
         
+        this.id = rootTag.getAttribute("id");
+        if(!this.id) {
+            throw "All levels must have an unique id.";
+        }
+        
         this.name = rootTag.getAttribute("name") || "[Level Name]";
+        this.subname = rootTag.getAttribute("subname") || "";
+        this.showIntro = rootTag.getAttribute("showIntro");
+        if(this.showIntro === null) {
+            this.showIntro = true;
+        } else {
+            this.showIntro = this.showIntro === "true";
+        }
     }
     
     _initController() {
@@ -52,6 +64,19 @@ class Level {
         engine.camera.yaw = playerYaw * Math.PI;
         engine.camera.pitch = playerPitch * Math.PI;
         document.body.style.backgroundColor = bgColor;
+        
+        if(this.showIntro) {
+            engine.levelIntroName.innerHTML = this.name;
+            engine.levelIntroSubname.innerHTML = this.subname;
+            engine.levelIntroContainer.style.display = "block";
+            setTimeout(() => {
+                engine.levelIntroContainer.style.opacity = 0;
+            }, 3000);
+            setTimeout(() => {
+                engine.levelIntroContainer.style.display = "none";
+                engine.levelIntroContainer.style.opacity = 100;
+            }, 3750);
+        }
         
         for(let i = 0; i < rootTag.children.length; i++) {
             let bodyTag = rootTag.children[i];

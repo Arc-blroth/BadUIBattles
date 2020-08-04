@@ -79,7 +79,8 @@ window.levels["prologue"].controllerClass = class extends LevelController {
                     document.body.style.backgroundColor = `rgb(${10 + (255 - 10) * blindness}, ${14 + (255 - 14) * blindness}, ${18 + (255 - 18) * blindness})`;
                 }
             } else {
-                engine.loadLevel("testing-room");
+                document.title = "badUiBattles3d: The Land of BadUI";
+                engine.loadLevel("captcha");
             }
         }
     }

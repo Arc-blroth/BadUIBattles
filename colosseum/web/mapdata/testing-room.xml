@@ -1,4 +1,4 @@
-<level name="testing-room" playerX="0" playerY="-2000" playerZ="0">
+<level id="testing-room" showIntro="false" playerX="0" playerY="-2000" playerZ="0">
     <boxBody width="10000" height="1000" depth="10000" mass="0" fixed="false">
     </boxBody>
     <uiBody width="1000" height="1000" posX="0" posY="-1500" posZ="-1000">

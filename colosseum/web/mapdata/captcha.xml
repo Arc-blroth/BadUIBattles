@@ -1,0 +1,7 @@
+<level id="captcha" name="Level 1" subname="Completely Annoying Private Turing test to Challenge and Hinder Advancement [CAPTCHA]" playerX="0" playerY="-2000" playerZ="0">
+    <boxBody width="10000" height="1000" depth="10000" mass="0" fixed="false">
+    </boxBody>
+    <uiBody width="1000" height="1000" posX="0" posY="-1500" posZ="-1000">
+        <div class="test1" />
+    </uiBody>
+</level>

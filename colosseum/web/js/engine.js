@@ -62,6 +62,18 @@ class Engine {
         this.level = null;
         this.controller = null;
         
+        this.levelIntroContainer = document.createElement("div");
+        this.levelIntroContainer.classList.add("ui", "level-intro");
+        document.body.append(this.levelIntroContainer);
+        this.levelIntroName = document.createElement("h1");
+        this.levelIntroName.classList.add("ui", "level-intro-name");
+        this.levelIntroContainer.append(this.levelIntroName);
+        this.levelIntroName.innerHTML = "dio";
+        this.levelIntroSubname = document.createElement("h3");
+        this.levelIntroSubname.classList.add("ui", "level-intro-subname");
+        this.levelIntroContainer.append(this.levelIntroSubname);
+        this.levelIntroSubname.innerHTML = "za wardo";
+        
         this.dialogBoxTitle = document.createElement("div");
         this.dialogBoxTitle.classList.add("ui", "dialog-box", "dialog-box-title");
         document.body.append(this.dialogBoxTitle);
